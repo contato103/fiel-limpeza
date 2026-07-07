@@ -911,5 +911,33 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
       a.addEventListener('click', () => header.classList.remove('open')));
   }
 </script>
+
+<!-- Typebot bubble — Fiel (fiel-limpeza) -->
+<script type="module">
+  import Typebot from 'https://cdn.jsdelivr.net/npm/@typebot.io/js@0/dist/web.js';
+  const p = new URLSearchParams(location.search);
+  const utmKeys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+  const curUtms = {}; utmKeys.forEach(k => { if(p.get(k)) curUtms[k] = p.get(k); });
+  if(!localStorage.getItem('_utms') && Object.keys(curUtms).length) localStorage.setItem('_utms', JSON.stringify(curUtms));
+  const utms = JSON.parse(localStorage.getItem('_utms') || '{}');
+  const clickKeys = ['fbclid','gclid','gbraid','wbraid','ttclid','msclkid'];
+  const curClicks = {}; clickKeys.forEach(k => { if(p.get(k)) curClicks[k] = p.get(k); });
+  if(Object.keys(curClicks).length) localStorage.setItem('_clickids', JSON.stringify(curClicks));
+  const clicks = JSON.parse(localStorage.getItem('_clickids') || '{}');
+
+  Typebot.initBubble({
+    typebot: 'fiel-limpeza',
+    theme: {
+      button: { backgroundColor: '#2D4900', iconColor: '#FFFFFF' },
+      chatWindow: { backgroundColor: '#EDF2E4' },
+    },
+    prefilledVariables: {
+      utm_source: utms.utm_source || '', utm_medium: utms.utm_medium || '', utm_campaign: utms.utm_campaign || '',
+      utm_term: utms.utm_term || '', utm_content: utms.utm_content || '',
+      fbclid: clicks.fbclid || '', gclid: clicks.gclid || '', gbraid: clicks.gbraid || '',
+      wbraid: clicks.wbraid || '', ttclid: clicks.ttclid || '', msclkid: clicks.msclkid || '',
+    },
+  });
+</script>
 </body>
 </html>
