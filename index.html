@@ -67,6 +67,7 @@
     color:var(--green);display:inline-flex;align-items:center;gap:var(--s-2);
   }
   .eyebrow::before{content:"";width:26px;height:2px;background:var(--lime-deep)}
+  .eyebrow.nohyphen::before{display:none}
 
   .btn{
     font-family:var(--font-display);font-weight:700;font-size:.98rem;letter-spacing:-0.01em;
@@ -615,7 +616,7 @@
 <section class="block" id="processo">
   <div class="wrap">
     <div class="sec-head center reveal">
-      <span class="eyebrow" style="justify-content:center">Como funciona</span>
+      <span class="eyebrow nohyphen" style="justify-content:center">Como funciona</span>
       <h2>Do primeiro contato ao resultado,<br>em 4 passos.</h2>
     </div>
     <div class="steps">
