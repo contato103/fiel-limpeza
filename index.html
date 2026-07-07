@@ -206,10 +206,11 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   .lead-card .sub{font-size:.92rem;color:var(--ink-soft);margin-top:6px;margin-bottom:var(--s-5)}
   .field{margin-bottom:var(--s-3);position:relative}
   .field label{display:block;font-size:.76rem;font-weight:700;font-family:var(--font-display);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px}
-  .field input,.field select{width:100%;font-family:var(--font-body);font-size:.98rem;color:var(--ink);
+  .field input,.field select,.field textarea{width:100%;font-family:var(--font-body);font-size:.98rem;color:var(--ink);
     padding:12px 14px;border:1.5px solid var(--line);border-radius:11px;background:var(--surface);transition:border-color .2s,box-shadow .2s,background .2s}
-  .field input::placeholder{color:oklch(0.65 0.02 131)}
-  .field input:focus,.field select:focus{outline:none;border-color:var(--green);background:var(--white);box-shadow:0 0 0 4px oklch(0.55 0.15 131 /.13)}
+  .field textarea{resize:vertical;min-height:76px}
+  .field input::placeholder,.field textarea::placeholder{color:oklch(0.65 0.02 131)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--green);background:var(--white);box-shadow:0 0 0 4px oklch(0.55 0.15 131 /.13)}
   .field.row2{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
   .lead-card .btn{width:100%;justify-content:center;margin-top:var(--s-2)}
   .lead-card .fineprint{font-size:.74rem;color:var(--ink-soft);text-align:center;margin-top:var(--s-3);display:flex;gap:6px;align-items:center;justify-content:center}
@@ -441,6 +442,10 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
           <input id="nome" name="nome" type="text" placeholder="Seu nome completo" required />
         </div>
         <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" placeholder="voce@empresa.com.br" required />
+        </div>
+        <div class="field">
           <label for="empresa">Empresa / Condomínio</label>
           <input id="empresa" name="empresa" type="text" placeholder="Nome da empresa" required />
         </div>
@@ -470,6 +475,10 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
             <option>Proteção com nanotecnologia</option>
             <option>Outro serviço — quero orientação</option>
           </select>
+        </div>
+        <div class="field">
+          <label for="mensagem">Mensagem <span style="font-weight:400;text-transform:none;letter-spacing:normal">(opcional)</span></label>
+          <textarea id="mensagem" name="mensagem" rows="3" placeholder="Conte um pouco sobre a necessidade…"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Solicitar orçamento</button>
         <p class="fineprint">
@@ -691,6 +700,10 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
           <label for="nome2">Nome</label>
           <input id="nome2" type="text" placeholder="Seu nome completo" required />
         </div>
+        <div class="field">
+          <label for="email2">E-mail</label>
+          <input id="email2" type="email" placeholder="voce@empresa.com.br" required />
+        </div>
         <div class="field row2">
           <div><label for="empresa2">Empresa</label><input id="empresa2" type="text" placeholder="Empresa / condomínio" required /></div>
           <div><label for="cidade2">Cidade</label><input id="cidade2" type="text" placeholder="Sua cidade" required /></div>
@@ -715,6 +728,10 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
             <option>Proteção com nanotecnologia</option>
             <option>Outro serviço — quero orientação</option>
           </select>
+        </div>
+        <div class="field">
+          <label for="mensagem2">Mensagem <span style="font-weight:400;text-transform:none;letter-spacing:normal">(opcional)</span></label>
+          <textarea id="mensagem2" rows="3" placeholder="Conte um pouco sobre a necessidade…"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Enviar solicitação</button>
         <p class="fineprint">
@@ -875,7 +892,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
       const event_id = generateEventId();
 
       const payload = {
-        name, empresa: val(f.empresa), cnpj: val(f.cnpj), phone: val(f.whats), cidade: val(f.cidade), servico: val(f.servico),
+        name, email: val(f.email), empresa: val(f.empresa), cnpj: val(f.cnpj), phone: val(f.whats), cidade: val(f.cidade), servico: val(f.servico), mensagem: val(f.mensagem),
         event_id, first_name, last_name,
         fbp: getCookie('_fbp'), fbc, fbclid,
         gclid: clickIds.gclid||'', gbraid: clickIds.gbraid||'', wbraid: clickIds.wbraid||'',
@@ -900,8 +917,8 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
       document.getElementById(okId).classList.add('show');
     });
   }
-  handle('leadForm', 'formOk',  { nome:'nome',  empresa:'empresa',  cnpj:'cnpj',  whats:'whats',  cidade:'cidade',  servico:'servico'  });
-  handle('leadForm2','formOk2', { nome:'nome2', empresa:'empresa2', cnpj:'cnpj2', whats:'whats2', cidade:'cidade2', servico:'servico2' });
+  handle('leadForm', 'formOk',  { nome:'nome',  email:'email',  empresa:'empresa',  cnpj:'cnpj',  whats:'whats',  cidade:'cidade',  servico:'servico',  mensagem:'mensagem'  });
+  handle('leadForm2','formOk2', { nome:'nome2', email:'email2', empresa:'empresa2', cnpj:'cnpj2', whats:'whats2', cidade:'cidade2', servico:'servico2', mensagem:'mensagem2' });
 
   // Mobile menu toggle
   const menuBtn = document.getElementById('menuBtn');
@@ -928,7 +945,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   Typebot.initBubble({
     typebot: 'fiel-limpeza',
     theme: {
-      button: { backgroundColor: '#2D4900', iconColor: '#FFFFFF' },
+      button: { backgroundColor: '#25D366', customIconSrc: 'https://fiel-limpeza-pesada.vercel.app/wa-icon.svg' },
       chatWindow: { backgroundColor: '#EDF2E4' },
     },
     prefilledVariables: {
