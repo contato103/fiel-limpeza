@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fiel Limpeza — Limpeza Pesada e Lavação de Fachada em Brusque/SC</title>
+<meta name="description" content="Limpeza pesada em Brusque e todo o Vale do Itajaí: fachadas, telhados, pisos, vidros, ACM e mais. Segurança NR35, rapel e plataforma articulada. Desde 2012, a limpeza que você pode confiar. Peça seu orçamento." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* --- Brand green system (OKLCH) — matched to Grupo Fiel (contato): olive-yellow green, hue ~131 --- */
+    --lime:      oklch(0.71 0.185 131);   /* #6EB102 barra topo (lima) */
+    --lime-deep: oklch(0.689 0.189 131);
+    --green:     oklch(0.62 0.170 131);   /* #619D00 verde primário (headline/destaque) */
+    --green-mid: oklch(0.547 0.150 131);  /* #508100 meio do gradiente */
+    --green-deep:oklch(0.375 0.098 131);  /* #2D4900 verde escuro (botões) */
+    --ink:       oklch(0.25 0.050 131);   /* seções escuras / títulos */
+    --ink-soft:  oklch(0.41 0.022 131);   /* texto corpo (~#333) */
+
+    --paper:     oklch(0.975 0.005 128);  /* #F6F6F6 fundo */
+    --surface:   oklch(0.955 0.008 130);
+    --line:      oklch(0.895 0.013 131);
+    --line-soft: oklch(0.925 0.010 131);
+    --white:     oklch(0.996 0.003 128);
+
+    /* on-dark tints */
+    --on-dark:      oklch(0.965 0.012 128);
+    --on-dark-soft: oklch(0.82 0.022 131);
+
+    /* --- 4pt spacing scale --- */
+    --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
+    --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px; --s-10:128px;
+
+    --maxw:1200px;
+    --radius:14px;
+    --radius-lg:22px;
+
+    --ease:cubic-bezier(.2,.7,.2,1);
+    --ease-out:cubic-bezier(.16,1,.3,1);
+
+    --font-display:'Archivo',system-ui,sans-serif;
+    --font-body:'Hanken Grotesk',system-ui,sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font-body);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  ::selection{background:var(--lime);color:var(--ink)}
+
+  .wrap{width:min(100% - 40px,var(--maxw));margin-inline:auto}
+
+  h1,h2,h3,h4{font-family:var(--font-display);line-height:1.02;letter-spacing:-0.02em;font-weight:800}
+  .eyebrow{
+    font-family:var(--font-display);
+    font-weight:700;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--green);display:inline-flex;align-items:center;gap:var(--s-2);
+  }
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--lime-deep)}
+
+  .btn{
+    font-family:var(--font-display);font-weight:700;font-size:.98rem;letter-spacing:-0.01em;
+    display:inline-flex;align-items:center;gap:var(--s-2);
+    padding:15px 26px;border-radius:100px;cursor:pointer;border:none;
+    transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease);
+    white-space:nowrap;
+  }
+  .btn-primary{background:var(--green-deep);color:var(--on-dark);box-shadow:0 1px 0 oklch(0.5 0.1 131 / .2)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px oklch(0.32 0.08 131 /.28)}
+  .btn-lime{background:var(--lime);color:var(--ink)}
+  .btn-lime:hover{transform:translateY(-2px);box-shadow:0 12px 30px oklch(0.75 0.18 130 / .45)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+  .btn svg{width:18px;height:18px}
+
+  /* ---------- Placeholder image blocks ---------- */
+  .ph{
+    position:relative;width:100%;height:100%;
+    background:
+      repeating-linear-gradient(135deg, oklch(0.94 0.02 131) 0 2px, transparent 2px 16px),
+      linear-gradient(160deg, var(--surface), oklch(0.92 0.02 131));
+    border:1px dashed oklch(0.78 0.05 131);
+    border-radius:var(--radius);
+    display:grid;place-content:center;justify-items:center;gap:var(--s-2);
+    text-align:center;padding:var(--s-5);color:var(--ink-soft);overflow:hidden;
+  }
+  .ph.dark{
+    background:
+      repeating-linear-gradient(135deg, oklch(0.30 0.05 131) 0 2px, transparent 2px 16px),
+      linear-gradient(160deg, var(--green-deep), oklch(0.27 0.06 131));
+    border-color:oklch(0.45 0.06 131);color:var(--on-dark-soft);
+  }
+  .ph .ph-ic{width:34px;height:34px;opacity:.65}
+  .ph .ph-label{font-family:var(--font-display);font-weight:700;font-size:.82rem;letter-spacing:.02em;max-width:26ch}
+  .ph .ph-tag{
+    position:absolute;top:12px;left:12px;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+    font-family:var(--font-display);font-weight:700;
+    background:oklch(0.99 0.005 130 / .82);color:var(--green);padding:4px 9px;border-radius:100px;
+  }
+  .ph.dark .ph-tag{background:oklch(0.22 0.04 131 / .7);color:var(--lime)}
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- Motion enhancements ---------- */
+  /* image reveal (settle from slight zoom) + hover zoom, clipped to rounded cell */
+  .showcase .band>div,.ba,.diff-visual{overflow:hidden;border-radius:var(--radius)}
+  .band-img,.svc-photo,.ba-img{transition:transform .9s var(--ease-out)}
+  .reveal .band-img,.reveal .svc-photo,.reveal .ba-img{transform:scale(1.07)}
+  .reveal.in .band-img,.reveal.in .svc-photo,.reveal.in .ba-img{transform:scale(1)}
+  .svc:hover .svc-photo,.showcase .band>div:hover .band-img,.ba:hover .ba-img{transform:scale(1.05)}
+  /* service icon + diferenciais number micro-interactions */
+  .svc-ic{transition:transform .35s var(--ease-out),background .3s var(--ease)}
+  .svc:hover .svc-ic{transform:scale(1.1) rotate(-5deg)}
+  .diff-item .n{transition:transform .35s var(--ease-out)}
+  .diff-item:hover .n{transform:scale(1.22)}
+  /* chip hover */
+  .svc-more em{transition:transform .25s var(--ease),background .25s var(--ease)}
+  .svc-more em:hover{transform:translateY(-2px);background:oklch(0.90 0.08 131)}
+  /* button press feedback */
+  .btn:active{transform:translateY(0) scale(.97)}
+  /* faq answer fade-in */
+  .qa[open] .ans{animation:faqIn .32s var(--ease-out)}
+  @keyframes faqIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  /* trust items + segments subtle lift */
+  .trust-item,.step{transition:transform .3s var(--ease)}
+  .step:hover{transform:translateY(-4px)}
+  @media (prefers-reduced-motion:reduce){
+    .band-img,.svc-photo,.ba-img{transform:none !important;transition:none !important}
+    .qa[open] .ans{animation:none}
+    .btn:active,.svc:hover .svc-ic,.diff-item:hover .n,.step:hover,.svc-more em:hover{transform:none}
+  }
+
+  /* ================= HEADER ================= */
+  header.site{position:sticky;top:0;z-index:60;background:linear-gradient(100deg, oklch(0.32 0.085 131) 0%, oklch(0.46 0.13 131) 100%);border-bottom:3px solid var(--lime);transition:box-shadow .3s var(--ease)}
+  header.site.scrolled{box-shadow:0 8px 30px oklch(0.3 0.05 131 /.08)}
+  header.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--s-5);padding:14px 0}
+  .logo{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:900;font-size:1.5rem;letter-spacing:-0.03em;color:var(--ink)}
+  .logo-img{height:42px;width:auto;display:block}
+  footer.site .logo-img{height:50px}
+  .logo .leaf{width:18px;height:18px;color:var(--green)}
+  .logo b{color:var(--green)}
+  .logo small{font-family:var(--font-display);font-weight:700;font-size:.56rem;letter-spacing:.34em;color:var(--ink-soft);align-self:center;text-transform:uppercase}
+  nav.main{display:flex;align-items:center;gap:var(--s-6)}
+  nav.main a{font-weight:600;font-size:.95rem;color:var(--on-dark);position:relative;transition:color .2s}
+  nav.main a::after{content:"";position:absolute;left:0;bottom:-5px;height:2px;width:0;background:var(--lime);transition:width .25s var(--ease)}
+  nav.main a:hover{color:var(--white)}
+  nav.main a:hover::after{width:100%}
+  .header-cta{display:flex;align-items:center;gap:var(--s-3)}
+  .menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px;color:var(--on-dark)}
+  .menu-btn svg{width:26px;height:26px}
+
+  /* ================= HERO ================= */
+  .hero{position:relative;padding:clamp(40px,7vw,84px) 0 clamp(48px,7vw,90px);overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;z-index:-2;
+    background:linear-gradient(170deg, oklch(0.93 0.06 131) 0%, oklch(0.965 0.03 131) 52%, oklch(0.985 0.012 131) 100%);}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,4vw,64px);align-items:center}
+  .hero h1{font-size:clamp(2.5rem,5.6vw,4.4rem);font-weight:900;letter-spacing:-0.035em}
+  .hero h1 .hl{color:var(--green);white-space:nowrap}
+  .hero p.lead{font-size:clamp(1.05rem,1.6vw,1.22rem);color:var(--ink-soft);max-width:52ch;margin-top:var(--s-5)}
+  .hero-cta{display:flex;gap:var(--s-3);margin-top:var(--s-6);flex-wrap:wrap}
+  .trust{display:flex;gap:var(--s-6);margin-top:var(--s-7);flex-wrap:wrap}
+  .trust-item{display:flex;flex-direction:column;gap:2px}
+  .trust-item b{font-family:var(--font-display);font-weight:800;font-size:1.7rem;color:var(--ink);line-height:1}
+  .trust-item span{font-size:.82rem;color:var(--ink-soft)}
+
+  /* lead form card */
+  .lead-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);color:var(--ink);
+    padding:clamp(22px,3vw,32px);box-shadow:0 30px 70px oklch(0.32 0.08 131 /.12),0 2px 6px oklch(0.32 0.08 131 /.06);position:relative}
+  .lead-card h3{font-size:1.4rem;font-weight:800;letter-spacing:-0.02em}
+  .lead-card .sub{font-size:.92rem;color:var(--ink-soft);margin-top:6px;margin-bottom:var(--s-5)}
+  .field{margin-bottom:var(--s-3);position:relative}
+  .field label{display:block;font-size:.76rem;font-weight:700;font-family:var(--font-display);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px}
+  .field input,.field select{width:100%;font-family:var(--font-body);font-size:.98rem;color:var(--ink);
+    padding:12px 14px;border:1.5px solid var(--line);border-radius:11px;background:var(--surface);transition:border-color .2s,box-shadow .2s,background .2s}
+  .field input::placeholder{color:oklch(0.65 0.02 131)}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--green);background:var(--white);box-shadow:0 0 0 4px oklch(0.55 0.15 131 /.13)}
+  .field.row2{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
+  .lead-card .btn{width:100%;justify-content:center;margin-top:var(--s-2)}
+  .lead-card .fineprint{font-size:.74rem;color:var(--ink-soft);text-align:center;margin-top:var(--s-3);display:flex;gap:6px;align-items:center;justify-content:center}
+  .lead-card .fineprint svg{width:14px;height:14px;color:var(--green)}
+  .form-ok{display:none;text-align:center;padding:var(--s-5) 0}
+  .form-ok.show{display:block}
+  .form-ok .check{width:58px;height:58px;margin:0 auto var(--s-4);border-radius:50%;background:var(--lime);display:grid;place-content:center}
+  .form-ok .check svg{width:30px;height:30px;color:var(--ink)}
+  .form-ok h3{font-size:1.3rem}
+  .form-ok p{color:var(--ink-soft);margin-top:6px}
+
+
+  /* ================= SECTION SHELL ================= */
+  section.block{padding:clamp(60px,8vw,110px) 0}
+  .sec-head{max-width:64ch;margin-bottom:var(--s-8)}
+  .sec-head.center{margin-inline:auto;text-align:center}
+  .sec-head h2{font-size:clamp(2rem,3.8vw,3.1rem);font-weight:900;margin-top:var(--s-3);letter-spacing:-0.03em}
+  .sec-head p{font-size:1.08rem;color:var(--ink-soft);margin-top:var(--s-4);max-width:60ch}
+  .sec-head.center p{margin-inline:auto}
+
+  /* ================= SHOWCASE BAND ================= */
+  .showcase{position:relative}
+  .showcase .band{display:grid;grid-template-columns:1.6fr 1fr;grid-template-rows:1fr 1fr;gap:var(--s-3);height:clamp(340px,44vw,520px)}
+  .showcase .band .a{grid-row:1/3}
+  .band-img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius);display:block}
+  .ba-img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius);display:block}
+  .svc-photo{width:100%;height:100%;object-fit:cover;display:block;border-bottom:1px solid var(--line)}
+  .showcase .stat-float{position:absolute;left:clamp(16px,3vw,34px);bottom:clamp(16px,3vw,34px);
+    background:var(--ink);color:var(--on-dark);padding:18px 24px;border-radius:16px;box-shadow:0 20px 50px oklch(0.2 0.05 131 /.4)}
+  .showcase .stat-float b{font-family:var(--font-display);font-weight:900;font-size:2rem;color:var(--lime);display:block;line-height:1}
+  .showcase .stat-float span{font-size:.82rem;color:var(--on-dark-soft)}
+
+  /* ================= SERVICES ================= */
+  .svc-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--s-4)}
+  .svc{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;
+    transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s var(--ease)}
+  .svc:hover{transform:translateY(-6px);box-shadow:0 26px 54px oklch(0.32 0.08 131 /.14);border-color:oklch(0.80 0.06 131)}
+  .svc.feat{grid-column:span 3}
+  .svc.half{grid-column:span 3}
+  .svc.third{grid-column:span 3}
+  .svc .svc-img{height:230px;flex:0 0 auto}
+  .svc .svc-img .ph{border:none;border-radius:0;border-bottom:1px solid var(--line)}
+  .svc .svc-body{padding:var(--s-5);display:flex;flex-direction:column;gap:var(--s-2);flex:1}
+  .svc .svc-ic{width:44px;height:44px;border-radius:12px;background:oklch(0.92 0.08 131);color:var(--green);display:grid;place-content:center;margin-bottom:var(--s-2)}
+  .svc .svc-ic svg{width:24px;height:24px}
+  .svc h3{font-size:1.28rem;font-weight:800;letter-spacing:-0.02em}
+  .svc.feat h3{font-size:1.6rem}
+  .svc p{font-size:.95rem;color:var(--ink-soft)}
+  .svc .tagline{margin-top:auto;padding-top:var(--s-3);font-family:var(--font-display);font-weight:700;font-size:.82rem;color:var(--green);display:inline-flex;align-items:center;gap:6px}
+  .svc .tagline svg{width:15px;height:15px;transition:transform .25s var(--ease)}
+  .svc:hover .tagline svg{transform:translateX(4px)}
+  .svc-more{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-3);margin-top:var(--s-6);padding-top:var(--s-5);border-top:1px solid var(--line)}
+  .svc-more span{font-family:var(--font-display);font-weight:800;color:var(--ink);font-size:.98rem}
+  .svc-more em{font-style:normal;font-size:.9rem;color:var(--green-mid);font-weight:600;background:oklch(0.94 0.05 131);padding:8px 15px;border-radius:100px}
+
+  /* ================= SEGMENTS ================= */
+  .segments{background:var(--surface)}
+  .seg-head{margin-bottom:var(--s-7)}
+  .seg-head h2{font-size:clamp(1.8rem,3.4vw,2.8rem);font-weight:900;margin-top:var(--s-3);letter-spacing:-0.03em}
+  .seg-row{display:grid;grid-template-columns:repeat(3,1fr)}
+  .seg{padding-right:var(--s-6)}
+  .seg:not(:first-child){border-left:1px solid var(--line);padding-left:var(--s-6)}
+  .seg-k{font-family:var(--font-display);font-weight:800;font-size:1.35rem;color:var(--ink);display:block;margin-bottom:var(--s-3)}
+  .seg-k::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--lime-deep);margin-right:10px;vertical-align:middle}
+  .seg p{color:var(--ink-soft);font-size:.98rem;max-width:34ch}
+
+  /* ================= DIFERENCIAIS ================= */
+  .diff{background:var(--ink);color:var(--on-dark)}
+  .diff .sec-head h2{color:var(--white)}
+  .diff .sec-head p{color:var(--on-dark-soft)}
+  .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+  .diff-list{display:flex;flex-direction:column;gap:var(--s-2)}
+  .diff-item{display:flex;gap:var(--s-4);padding:var(--s-5) 0;border-top:1px solid oklch(0.4 0.05 131 /.4)}
+  .diff-item:last-child{border-bottom:1px solid oklch(0.4 0.05 131 /.4)}
+  .diff-item .n{font-family:var(--font-display);font-weight:900;font-size:1.1rem;color:var(--lime);flex:0 0 auto;width:34px}
+  .diff-item h3{font-size:1.2rem;font-weight:800;color:var(--white);margin-bottom:4px}
+  .diff-item p{font-size:.95rem;color:var(--on-dark-soft);max-width:44ch}
+  .diff-visual{height:clamp(400px,50vw,560px)}
+
+  /* ================= PROCESS ================= */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-4);counter-reset:step}
+  .step{position:relative;padding-top:var(--s-6)}
+  .step::before{counter-increment:step;content:"0" counter(step);font-family:var(--font-display);font-weight:900;font-size:3.2rem;color:oklch(0.88 0.10 131);line-height:.8;position:absolute;top:-8px;left:0}
+  .step h3{font-size:1.18rem;font-weight:800;margin-top:var(--s-3);position:relative}
+  .step p{font-size:.94rem;color:var(--ink-soft);margin-top:6px}
+  .step .bar{height:3px;width:44px;background:var(--lime);border-radius:3px;margin-top:var(--s-4)}
+
+  /* ================= BEFORE / AFTER ================= */
+  .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-4)}
+  .ba{height:clamp(280px,34vw,420px);position:relative}
+  .ba .badge{position:absolute;top:14px;left:14px;z-index:2;font-family:var(--font-display);font-weight:800;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:6px 13px;border-radius:100px}
+  .ba .badge.before{background:oklch(0.55 0.03 60);color:var(--white)}
+  .ba .badge.after{background:var(--lime);color:var(--ink)}
+
+  /* ================= CTA BAND ================= */
+  .cta-band{background:linear-gradient(150deg,var(--green-deep),oklch(0.28 0.07 131));color:var(--on-dark);position:relative;overflow:hidden}
+  .cta-band::after{content:"";position:absolute;right:-120px;top:-120px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,oklch(0.78 0.185 131 /.28),transparent 68%)}
+  .cta-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(32px,5vw,72px);align-items:center;position:relative;z-index:2}
+  .cta-band h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:900;color:var(--white);letter-spacing:-0.03em}
+  .cta-band p{color:var(--on-dark-soft);font-size:1.1rem;margin-top:var(--s-4);max-width:46ch}
+  .cta-points{display:flex;flex-direction:column;gap:var(--s-3);margin-top:var(--s-6)}
+  .cta-points li{display:flex;align-items:center;gap:var(--s-3);list-style:none;color:var(--on-dark);font-weight:500}
+  .cta-points svg{width:20px;height:20px;color:var(--lime);flex:0 0 auto}
+
+  /* ================= FAQ ================= */
+  .faq{max-width:760px;margin-inline:auto}
+  .qa{border-bottom:1px solid var(--line)}
+  .qa summary{cursor:pointer;list-style:none;padding:var(--s-5) 0;display:flex;justify-content:space-between;align-items:center;gap:var(--s-4);
+    font-family:var(--font-display);font-weight:700;font-size:1.12rem;letter-spacing:-0.01em}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa .plus{flex:0 0 auto;width:26px;height:26px;position:relative;transition:transform .3s var(--ease)}
+  .qa .plus::before,.qa .plus::after{content:"";position:absolute;background:var(--green);border-radius:2px}
+  .qa .plus::before{top:12px;left:3px;width:20px;height:2px}
+  .qa .plus::after{top:3px;left:12px;width:2px;height:20px;transition:transform .3s var(--ease)}
+  .qa[open] .plus::after{transform:rotate(90deg)}
+  .qa .ans{overflow:hidden;color:var(--ink-soft);max-width:66ch;padding-bottom:var(--s-5);margin-top:-4px}
+
+  /* ================= FOOTER ================= */
+  footer.site{background:var(--ink);color:var(--on-dark-soft);padding:var(--s-9) 0 var(--s-6)}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1.2fr;gap:clamp(28px,4vw,64px)}
+  footer.site .logo{color:var(--white)}
+  footer.site .logo b{color:var(--lime)}
+  footer.site .logo small{color:var(--on-dark-soft)}
+  .foot-about{margin-top:var(--s-4);max-width:34ch;font-size:.95rem}
+  .foot-social{display:flex;gap:var(--s-2);margin-top:var(--s-5)}
+  .foot-social a{width:40px;height:40px;border-radius:11px;border:1px solid oklch(0.4 0.05 131 /.5);display:grid;place-content:center;color:var(--on-dark);transition:background .2s,color .2s,transform .2s}
+  .foot-social a:hover{background:var(--lime);color:var(--ink);transform:translateY(-2px)}
+  .foot-social svg{width:19px;height:19px}
+  .foot-col h4{font-family:var(--font-display);font-weight:800;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--white);margin-bottom:var(--s-4)}
+  .foot-col ul{list-style:none;display:flex;flex-direction:column;gap:var(--s-3)}
+  .foot-col a:hover{color:var(--lime)}
+  .foot-contact li{display:flex;gap:var(--s-3);align-items:flex-start;font-size:.95rem}
+  .foot-contact svg{width:18px;height:18px;color:var(--lime);flex:0 0 auto;margin-top:2px}
+  .foot-bottom{border-top:1px solid oklch(0.4 0.05 131 /.4);margin-top:var(--s-8);padding-top:var(--s-5);display:flex;justify-content:space-between;gap:var(--s-4);flex-wrap:wrap;font-size:.85rem}
+
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width:960px){
+    nav.main{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;
+      background:var(--white);border-bottom:1px solid var(--line);padding:var(--s-2) 20px var(--s-4);
+      box-shadow:0 16px 30px oklch(0.3 0.05 131 /.1);
+      opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .25s var(--ease),transform .25s var(--ease),visibility .25s}
+    header.site.open nav.main{opacity:1;visibility:visible;transform:none}
+    nav.main a{padding:14px 4px;border-top:1px solid var(--line-soft);font-size:1.05rem;color:var(--ink)}
+    nav.main a:hover{color:var(--green)}
+    nav.main a:first-child{border-top:none}
+    nav.main a::after{display:none}
+    .header-cta{display:none}
+    .menu-btn{display:block}
+    .hero-grid{grid-template-columns:1fr;gap:var(--s-6)}
+    .diff-grid{grid-template-columns:1fr}
+    .diff-visual{height:340px;order:-1}
+    .cta-inner{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr 1fr}
+    .svc.feat,.svc.half,.svc.third{grid-column:span 3}
+    .showcase .band{grid-template-columns:1fr 1fr}
+    .foot-grid{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:600px){
+    .svc-grid{grid-template-columns:1fr}
+    .svc.feat,.svc.half,.svc.third{grid-column:span 1}
+    .seg-row{grid-template-columns:1fr}
+    .seg:not(:first-child){border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:var(--s-5);margin-top:var(--s-5)}
+    .steps{grid-template-columns:1fr}
+    .ba-grid{grid-template-columns:1fr}
+    .showcase .band{grid-template-columns:1fr;grid-template-rows:none;height:auto}
+    .showcase .band>div{height:220px}
+    .showcase .band .a{grid-row:auto}
+    .foot-grid{grid-template-columns:1fr}
+    .field.row2{grid-template-columns:1fr}
+    .trust{gap:var(--s-5)}
+  }
+
+  /* hero entrance stagger */
+  .hero .anim{opacity:0;transform:translateY(22px);animation:rise .9s var(--ease-out) forwards}
+  .hero .a1{animation-delay:.05s}.hero .a2{animation-delay:.15s}.hero .a3{animation-delay:.25s}
+  .hero .a4{animation-delay:.35s}.hero .a5{animation-delay:.2s}
+  @keyframes rise{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.hero .anim{opacity:1;transform:none;animation:none}}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="site" id="top">
+  <div class="wrap">
+    <a href="#top" class="logo" aria-label="Fiel Limpeza">
+      <img src="logo-fiel-white.png" alt="Fiel Limpeza" class="logo-img" />
+    </a>
+    <nav class="main" aria-label="Navegação principal">
+      <a href="#servicos">Serviços</a>
+      <a href="#diferenciais">Diferenciais</a>
+      <a href="#processo">Como funciona</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <div class="header-cta">
+      <a href="#contato" class="btn btn-lime">Solicitar orçamento</a>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow anim a1">Limpeza pesada · Brusque e todo o Vale</span>
+      <h1 class="anim a2" style="margin-top:20px">Onde a faxina comum para,<br>a <span class="hl">Fiel começa</span>.</h1>
+      <p class="lead anim a3">Tem sujeira que faxina nenhuma resolve — a do alto da fachada, a do telhado esquecido, a do piso encardido pelo tempo. É bem aí que a gente entra. <strong>Limpeza pesada</strong> feita com segurança, equipamento certo e o cuidado de quem trata o seu espaço como se fosse o próprio. Desde 2012.</p>
+      <div class="hero-cta anim a4">
+        <a href="#contato" class="btn btn-lime">Quero um orçamento
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#servicos" class="btn btn-ghost">Ver serviços</a>
+      </div>
+      <div class="trust anim a5">
+        <div class="trust-item"><b>Desde 2012</b><span>empresa familiar de Brusque</span></div>
+        <div class="trust-item"><b>NR35 + rapel</b><span>segurança em altura</span></div>
+        <div class="trust-item"><b>Sem parar</b><span>a sua operação</span></div>
+      </div>
+    </div>
+
+    <div class="lead-card anim a2" id="form-hero">
+      <form id="leadForm">
+        <h3>Peça seu orçamento</h3>
+        <p class="sub">Conte o que você precisa limpar. A gente entra em contato o quanto antes.</p>
+        <div class="field">
+          <label for="nome">Nome</label>
+          <input id="nome" name="nome" type="text" placeholder="Seu nome completo" required />
+        </div>
+        <div class="field">
+          <label for="empresa">Empresa / Condomínio</label>
+          <input id="empresa" name="empresa" type="text" placeholder="Nome da empresa" required />
+        </div>
+        <div class="field row2">
+          <div>
+            <label for="whats">Telefone</label>
+            <input id="whats" name="whats" type="tel" inputmode="tel" placeholder="(00) 00000-0000" required />
+          </div>
+          <div>
+            <label for="cidade">Cidade</label>
+            <input id="cidade" name="cidade" type="text" placeholder="Sua cidade" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="servico">Serviço de interesse</label>
+          <select id="servico" name="servico">
+            <option>Lavação de fachada</option>
+            <option>Lavação predial (rapel)</option>
+            <option>Lavação de telhado</option>
+            <option>Lavação de vidros</option>
+            <option>Limpeza de ACM</option>
+            <option>Lavação verde / sustentável</option>
+            <option>Proteção com nanotecnologia</option>
+            <option>Outro serviço — quero orientação</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Solicitar orçamento</button>
+        <p class="fineprint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+          Seus dados estão seguros. Sem spam.
+        </p>
+      </form>
+      <div class="form-ok" id="formOk">
+        <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h3>Pedido recebido!</h3>
+        <p>Obrigado. Nossa equipe entra em contato em breve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SHOWCASE BAND ============ -->
+<section class="showcase reveal">
+  <div class="wrap">
+    <div class="band">
+      <div class="a"><img class="band-img" src="fiel_sc_a.jpg" alt="Fiel na fachada da Havan" loading="lazy" style="object-position:center 45%"></div>
+      <div><img class="band-img" src="fiel_koch1.jpg" alt="Guindaste da Fiel limpando a fachada da Komprão, do Grupo Koch" loading="lazy" style="object-position:center"></div>
+      <div><img class="band-img" src="fiel_koch2.jpg" alt="Fiel limpando a fachada de vidro do Grupo Koch" loading="lazy" style="object-position:center" /></div>
+    </div>
+    <div class="stat-float">
+      <b>Desde 2012</b>
+      <span>“A limpeza que você pode confiar”</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="block" id="servicos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Tudo que a limpeza pesada resolve</span>
+      <h2>Se é difícil, sujo<br>ou lá no alto, é com a gente.</h2>
+      <p>Aquela sujeira que se acumulou com o tempo, no canto difícil de alcançar, e que a limpeza do dia a dia nunca dá conta. É exatamente aí que a Fiel entra — pontualmente ou dentro de um contrato, sempre com equipe treinada e o cuidado que o seu patrimônio merece.</p>
+    </div>
+
+    <div class="svc-grid">
+      <!-- Featured -->
+      <article class="svc feat reveal">
+        <div class="svc-img"><img class="svc-photo" src="fiel_fachada.jpg" alt="Fiel lavando fachada comercial com plataforma articulada" loading="lazy" style="object-position:center 40%"></div>
+        <div class="svc-body">
+          <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v3M6 6l2 2M18 6l-2 2M12 8l-5 2.5v5L12 18l5-2.5v-5L12 8Z"/></svg></div>
+          <h3>Lavação de Fachada</h3>
+          <p>A fachada é o cartão de visita do seu negócio. A gente devolve o visual de nova — com plataforma articulada que alcança o alto sem parar o movimento do prédio.</p>
+          <span class="tagline">Fachada nova em tempo recorde
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+
+      <!-- Half -->
+      <article class="svc half reveal">
+        <div class="svc-img"><img class="svc-photo" src="fiel_drone.jpg" alt="Drone da Fiel limpando em altura" loading="lazy" style="object-position:center"></div>
+        <div class="svc-body">
+          <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12 12 4l9 8M6 10v9h12v-9"/></svg></div>
+          <h3>Lavação de Telhado</h3>
+          <p>Limo e mofo não são só questão de aparência — envelhecem o telhado. Limpamos zinco, concreto, cerâmica, barro e amianto seguindo à risca a <strong>NR35</strong> de trabalho em altura.</p>
+          <span class="tagline">Todos os tipos de telha
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+
+      <!-- Half -->
+      <article class="svc half reveal">
+        <div class="svc-img"><img class="svc-photo" src="fiel_rapel2.jpg" alt="Equipe da Fiel em lavação predial por rapel em arranha-céu" loading="lazy" style="object-position:center"></div>
+        <div class="svc-body">
+          <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v8M8 5h8M12 11l-4 3.5V21h8v-6.5L12 11Z"/></svg></div>
+          <h3>Lavação Predial (rapel)</h3>
+          <p>Prédio alto, aquele ponto que ninguém alcança? Descemos de rapel até lá, com todo o cuidado e precisão — onde escada e andaime não chegam.</p>
+          <span class="tagline">Acesso por rapel
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+
+      <!-- Thirds -->
+      <article class="svc third reveal">
+        <div class="svc-img"><img class="svc-photo" src="fiel_verde.jpg" alt="Operação da Fiel em ambiente cercado de verde" loading="lazy"></div>
+        <div class="svc-body">
+          <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3c4 3 6 6 6 10a6 6 0 0 1-12 0c0-4 2-7 6-10Z"/></svg></div>
+          <h3>Lavação Verde</h3>
+          <p>Limpeza profunda não precisa pesar no meio ambiente. Usamos práticas ecológicas que cuidam do seu espaço e do planeta ao mesmo tempo.</p>
+          <span class="tagline">Sustentável
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+
+      <article class="svc third reveal">
+        <div class="svc-img"><img class="svc-photo" src="fiel_vidros.jpg" alt="Fiel lavando fachada de vidro em altura" loading="lazy" style="object-position:center 45%"></div>
+        <div class="svc-body">
+          <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 9h16M12 3v18"/></svg></div>
+          <h3>Lavação de Vidros</h3>
+          <p>Vidro limpo muda o ambiente: mais luz, mais brilho, melhor impressão. Cuidamos de janelas, fachadas de vidro e divisórias, até nos cantos mais difíceis.</p>
+          <span class="tagline">Transparência total
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+
+      <article class="svc third reveal">
+        <div class="svc-img"><img class="svc-photo" src="fiel_acm.jpg" alt="Fiel limpando fachada de ACM da Fort Atacadista" loading="lazy" style="object-position:center 40%"></div>
+        <div class="svc-body">
+          <div class="svc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18"/></svg></div>
+          <h3>Limpeza de ACM</h3>
+          <p>O ACM pede mão certa pra não perder o acabamento. Limpamos preservando a estética e a vida útil do material ao longo do tempo.</p>
+          <span class="tagline">Preserva o material
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </article>
+    </div>
+
+    <div class="svc-more reveal">
+      <span>Também realizamos:</span>
+      <em>Proteção com Nano Tecnologia</em>
+      <em>Lavação de Paver, Pisos e Calçadas</em>
+      <em>Limpeza de Coifas e Churrasqueiras</em>
+      <em>Limpeza de Caixa d'Água</em>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEGMENTS / PARA QUEM ============ -->
+<section class="block segments">
+  <div class="wrap">
+    <div class="seg-head reveal">
+      <span class="eyebrow">Para quem atendemos</span>
+      <h2>Feito para o seu tipo de operação.</h2>
+    </div>
+    <div class="seg-row">
+      <div class="seg reveal">
+        <span class="seg-k">Indústria</span>
+        <p>Galpões e áreas industriais que pedem limpeza planejada — com qualidade, segurança e o custo sempre sob controle.</p>
+      </div>
+      <div class="seg reveal">
+        <span class="seg-k">Comércio</span>
+        <p>Do pequeno ao grande comércio: um cronograma sob medida pro seu movimento, sem atrapalhar as vendas.</p>
+      </div>
+      <div class="seg reveal">
+        <span class="seg-k">Condomínio</span>
+        <p>Cuidamos do patrimônio de todo mundo e tiramos um peso das costas do síndico — limpeza corretiva, preventiva e de manutenção.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DIFERENCIAIS ============ -->
+<section class="block diff" id="diferenciais">
+  <div class="wrap diff-grid">
+    <div class="diff-visual reveal"><img class="band-img" src="fiel_diff.jpg" alt="Caminhão e equipe da Fiel em operação ao entardecer" loading="lazy" style="object-position:center 55%"></div>
+    <div>
+      <div class="sec-head reveal" style="margin-bottom:var(--s-5)">
+        <span class="eyebrow" style="color:var(--lime)">Por que a Fiel</span>
+        <h2>Tecnologia onde o mercado<br>ainda usa balde e escada.</h2>
+      </div>
+      <div class="diff-list">
+        <div class="diff-item reveal"><span class="n">01</span><div><h3>Chegamos onde a escada não vai</h3><p>Com plataforma articulada e técnicas de rapel, lavamos fachadas altas com segurança — sem arriscar ninguém e sem perigo pra quem passa embaixo.</p></div></div>
+        <div class="diff-item reveal"><span class="n">02</span><div><h3>Segurança que não é negociável</h3><p>Trabalho em altura é coisa séria. Nossa equipe é treinada em rapel e segue a NR35 à risca — proteção pra todo mundo envolvido.</p></div></div>
+        <div class="diff-item reveal"><span class="n">03</span><div><h3>A gente não economiza em equipamento</h3><p>Buscamos sempre o melhor do mercado, porque é isso que entrega resultado de verdade — com o melhor custo pra você.</p></div></div>
+        <div class="diff-item reveal"><span class="n">04</span><div><h3>Encaixamos na sua rotina</h3><p>Sua loja vende, sua indústria produz, seu prédio funciona. A gente trabalha sem interromper a sua operação.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="block" id="processo">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow" style="justify-content:center">Como funciona</span>
+      <h2>Do primeiro contato ao resultado,<br>em 4 passos.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h3>Consultoria</h3><p>A gente vai até você entender o que precisa ser limpo, a altura e cada detalhe do espaço.</p><div class="bar"></div></div>
+      <div class="step reveal"><h3>Orçamento</h3><p>Você recebe uma proposta clara — preço, prazo e escopo, sem letra miúda.</p><div class="bar"></div></div>
+      <div class="step reveal"><h3>Execução</h3><p>Nossa equipe entra em ação com segurança total e o equipamento certo pra cada superfície.</p><div class="bar"></div></div>
+      <div class="step reveal"><h3>Acabamento</h3><p>Entregamos o resultado que dá orgulho — e, se quiser, a proteção nano pra durar mais.</p><div class="bar"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BEFORE / AFTER ============ -->
+<section class="block" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Resultado real</span>
+      <h2>A diferença que dá pra ver.</h2>
+      <p>Não tem argumento melhor que o antes e depois. Superfícies encardidas, com limo e poluição, de volta ao estado original — sem danificar nada.</p>
+    </div>
+    <div class="ba-grid">
+      <div class="ba reveal"><span class="badge before">Antes</span><img class="ba-img" src="fiel_antes.jpg" alt="Torre da Paróquia Dom Joaquim durante a limpeza" loading="lazy" style="object-position:center 40%"></div>
+      <div class="ba reveal"><span class="badge after">Depois</span><img class="ba-img" src="fiel_depois.jpg" alt="Paróquia Dom Joaquim depois da limpeza" loading="lazy" style="object-position:center 45%"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BAND + FORM ============ -->
+<section class="block cta-band" id="contato">
+  <div class="wrap cta-inner">
+    <div class="reveal">
+      <span class="eyebrow" style="color:var(--lime)">Fale com a Fiel</span>
+      <h2 style="margin-top:16px">Seu espaço merece<br>esse cuidado.</h2>
+      <p>Peça um orçamento sem compromisso. A gente atende indústrias, comércios, condomínios e prédios em Brusque e todo o Vale do Itajaí — e não foge de trabalho difícil.</p>
+      <ul class="cta-points">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>A gente retorna o seu contato</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Orçamento sem compromisso</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Equipe treinada conforme a NR35</li>
+      </ul>
+      <div class="hero-cta" style="margin-top:var(--s-7)">
+        <a href="#orcamento" class="btn btn-lime">Preencher formulário
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+    <div class="lead-card reveal" id="orcamento">
+      <form id="leadForm2">
+        <h3>Solicitar orçamento</h3>
+        <p class="sub">É rápido. A gente retorna com tudo que você precisa saber.</p>
+        <div class="field">
+          <label for="nome2">Nome</label>
+          <input id="nome2" type="text" placeholder="Seu nome completo" required />
+        </div>
+        <div class="field row2">
+          <div><label for="empresa2">Empresa</label><input id="empresa2" type="text" placeholder="Empresa / condomínio" required /></div>
+          <div><label for="cidade2">Cidade</label><input id="cidade2" type="text" placeholder="Sua cidade" required /></div>
+        </div>
+        <div class="field">
+          <label for="whats2">Telefone</label>
+          <input id="whats2" type="tel" inputmode="tel" placeholder="(00) 00000-0000" required />
+        </div>
+        <div class="field">
+          <label for="servico2">Serviço de interesse</label>
+          <select id="servico2">
+            <option>Lavação de fachada</option>
+            <option>Lavação predial (rapel)</option>
+            <option>Lavação de telhado</option>
+            <option>Lavação de vidros</option>
+            <option>Limpeza de ACM</option>
+            <option>Lavação verde / sustentável</option>
+            <option>Proteção com nanotecnologia</option>
+            <option>Outro serviço — quero orientação</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar solicitação</button>
+        <p class="fineprint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+          Seus dados estão seguros. Sem spam.
+        </p>
+      </form>
+      <div class="form-ok" id="formOk2">
+        <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h3>Recebido!</h3>
+        <p>Obrigado. Entraremos em contato em breve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="block" style="background:var(--surface)">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow" style="justify-content:center">Dúvidas frequentes</span>
+      <h2>Antes de pedir o orçamento.</h2>
+    </div>
+    <div class="faq">
+      <details class="qa reveal"><summary>Vocês lavam fachadas muito altas sem andaime?<span class="plus"></span></summary><div class="ans">Sim. Combinamos plataforma articulada e técnicas de rapel para alcançar grandes alturas e áreas inacessíveis com segurança.</div></details>
+      <details class="qa reveal"><summary>Além de fachada, o que mais vocês limpam?<span class="plus"></span></summary><div class="ans">Lavação de telhado, lavação predial por rapel, vidros, ACM, lavação verde, proteção com nanotecnologia, paver/pisos e calçadas, coifas e churrasqueiras e caixa d'água.</div></details>
+      <details class="qa reveal"><summary>O serviço interrompe o funcionamento do prédio?<span class="plus"></span></summary><div class="ans">Não. Planejamos horários e etapas para que a limpeza aconteça sem parar a operação da loja, indústria ou condomínio.</div></details>
+      <details class="qa reveal"><summary>Quais tipos de telhado vocês limpam?<span class="plus"></span></summary><div class="ans">Zinco, concreto, cerâmica, barro e amianto. Todo trabalho segue rigorosamente a norma NR35 de segurança em altura.</div></details>
+      <details class="qa reveal"><summary>Atendem fora de Brusque?<span class="plus"></span></summary><div class="ans">Sim, atendemos Brusque e todo o Vale do Itajaí. Consulte disponibilidade para outras regiões de Santa Catarina.</div></details>
+      <details class="qa reveal"><summary>Pedir um orçamento me compromete com alguma coisa?<span class="plus"></span></summary><div class="ans">Não. Você pede o orçamento sem compromisso e só fecha se fizer sentido pra você.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a href="#top" class="logo"><img src="logo-fiel-white.png" alt="Fiel Limpeza" class="logo-img" /></a>
+        <p class="foot-about">Empresa familiar de Brusque desde 2012. Do alto da fachada ao fundo da caixa d'água, entregamos a limpeza pesada que você pode confiar.</p>
+        <div class="foot-social">
+          <a href="https://www.instagram.com/fiellimpezaoficial/" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.facebook.com/fiellimpezaofical" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2 0-3.5 1.5-3.5 3.5V11H8v3h2.5v6h3v-6H16l.5-3H13.5V9.5c0-.3.2-.5.5-.5Z"/></svg></a>
+          <a href="https://www.linkedin.com/in/grupo-fiel-8230a1336/" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 8A1.5 1.5 0 1 0 5 6.5 1.5 1.5 0 0 0 6.5 8ZM5.5 9.5h2V19h-2ZM10 9.5h2v1.3a2.6 2.6 0 0 1 2.3-1.3c2 0 2.7 1.3 2.7 3.4V19h-2v-4.6c0-1.1-.4-1.8-1.4-1.8s-1.6.7-1.6 1.8V19h-2Z"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="#servicos">Lavação de fachada</a></li>
+          <li><a href="#servicos">Lavação de telhado</a></li>
+          <li><a href="#servicos">Limpeza pós-obra</a></li>
+          <li><a href="#servicos">Lavação verde</a></li>
+          <li><a href="#servicos">Proteção nanotecnologia</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Contato</h4>
+        <ul class="foot-contact">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Rua Moritz Germano Hoffmann, 115 — Centro, Brusque/SC · 88.350-180</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><a href="mailto:fiellimpeza@fiellimpeza.com">fiellimpeza@fiellimpeza.com</a></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><a href="#orcamento">Solicite seu orçamento pelo formulário</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© Fiel Limpeza 2026 — Todos os direitos reservados.</span>
+      <span>Limpeza pesada · Fachadas · Telhados · Brusque/SC</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // Header shadow on scroll
+  const header = document.querySelector('header.site');
+  addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 10));
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => {
+    const sibs = [...el.parentElement.children].filter(c => c.classList.contains('reveal'));
+    const i = sibs.indexOf(el);
+    if (i > 0) el.style.transitionDelay = Math.min(i, 8) * 65 + 'ms';
+    io.observe(el);
+  });
+
+  // Simple phone mask
+  function mask(el){
+    el.addEventListener('input', () => {
+      let v = el.value.replace(/\D/g,'').slice(0,11);
+      if(v.length>10) v = v.replace(/(\d{2})(\d{5})(\d{0,4}).*/,'($1) $2-$3');
+      else if(v.length>6) v = v.replace(/(\d{2})(\d{4})(\d{0,4}).*/,'($1) $2-$3');
+      else if(v.length>2) v = v.replace(/(\d{2})(\d{0,5}).*/,'($1) $2');
+      else if(v.length>0) v = v.replace(/(\d{0,2}).*/,'($1');
+      el.value = v;
+    });
+  }
+  document.querySelectorAll('input[type=tel]').forEach(mask);
+
+  // Fake submit -> success state (placeholder; hook to RD Station / backend later)
+  function handle(formId, okId){
+    const form = document.getElementById(formId);
+    if(!form) return;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      form.style.display = 'none';
+      document.getElementById(okId).classList.add('show');
+    });
+  }
+  handle('leadForm','formOk');
+  handle('leadForm2','formOk2');
+
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('menuBtn');
+  if(menuBtn){
+    menuBtn.addEventListener('click', () => header.classList.toggle('open'));
+    document.querySelectorAll('nav.main a').forEach(a =>
+      a.addEventListener('click', () => header.classList.remove('open')));
+  }
+</script>
+</body>
+</html>
