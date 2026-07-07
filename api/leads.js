@@ -225,6 +225,7 @@ export default async function handler(req) {
       'data':         ts.br,
       'nome':         d.name      || '',
       'empresa':      d.empresa   || '',
+      'cnpj':         d.cnpj      || '',
       'telefone':     formatPhone(d.phone),
       'cidade':       d.cidade    || '',
       'serviço':      d.servico   || '',

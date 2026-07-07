@@ -440,6 +440,10 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
           <label for="empresa">Empresa / Condomínio</label>
           <input id="empresa" name="empresa" type="text" placeholder="Nome da empresa" required />
         </div>
+        <div class="field">
+          <label for="cnpj">CNPJ</label>
+          <input id="cnpj" name="cnpj" type="text" inputmode="numeric" placeholder="00.000.000/0000-00" required />
+        </div>
         <div class="field row2">
           <div>
             <label for="whats">Telefone</label>
@@ -688,6 +692,10 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
           <div><label for="cidade2">Cidade</label><input id="cidade2" type="text" placeholder="Sua cidade" required /></div>
         </div>
         <div class="field">
+          <label for="cnpj2">CNPJ</label>
+          <input id="cnpj2" type="text" inputmode="numeric" placeholder="00.000.000/0000-00" required />
+        </div>
+        <div class="field">
           <label for="whats2">Telefone</label>
           <input id="whats2" type="tel" inputmode="tel" placeholder="(00) 00000-0000" required />
         </div>
@@ -806,6 +814,20 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   }
   document.querySelectorAll('input[type=tel]').forEach(mask);
 
+  // Máscara de CNPJ
+  function maskCnpj(el){
+    el.addEventListener('input', () => {
+      let d = el.value.replace(/\D/g,'').slice(0,14);
+      let v = d;
+      if(d.length>12) v = d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2}).*/,'$1.$2.$3/$4-$5');
+      else if(d.length>8) v = d.replace(/(\d{2})(\d{3})(\d{3})(\d{0,4}).*/,'$1.$2.$3/$4');
+      else if(d.length>5) v = d.replace(/(\d{2})(\d{3})(\d{0,3}).*/,'$1.$2.$3');
+      else if(d.length>2) v = d.replace(/(\d{2})(\d{0,3}).*/,'$1.$2');
+      el.value = v;
+    });
+  }
+  document.querySelectorAll('#cnpj, #cnpj2').forEach(maskCnpj);
+
   // ── Tracking (Meta Pixel Lead + CAPI via /api/leads) ──
   function getCookie(name){
     const m = document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));
@@ -849,7 +871,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
       const event_id = generateEventId();
 
       const payload = {
-        name, empresa: val(f.empresa), phone: val(f.whats), cidade: val(f.cidade), servico: val(f.servico),
+        name, empresa: val(f.empresa), cnpj: val(f.cnpj), phone: val(f.whats), cidade: val(f.cidade), servico: val(f.servico),
         event_id, first_name, last_name,
         fbp: getCookie('_fbp'), fbc, fbclid,
         gclid: clickIds.gclid||'', gbraid: clickIds.gbraid||'', wbraid: clickIds.wbraid||'',
@@ -874,8 +896,8 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
       document.getElementById(okId).classList.add('show');
     });
   }
-  handle('leadForm', 'formOk',  { nome:'nome',  empresa:'empresa',  whats:'whats',  cidade:'cidade',  servico:'servico'  });
-  handle('leadForm2','formOk2', { nome:'nome2', empresa:'empresa2', whats:'whats2', cidade:'cidade2', servico:'servico2' });
+  handle('leadForm', 'formOk',  { nome:'nome',  empresa:'empresa',  cnpj:'cnpj',  whats:'whats',  cidade:'cidade',  servico:'servico'  });
+  handle('leadForm2','formOk2', { nome:'nome2', empresa:'empresa2', cnpj:'cnpj2', whats:'whats2', cidade:'cidade2', servico:'servico2' });
 
   // Mobile menu toggle
   const menuBtn = document.getElementById('menuBtn');
