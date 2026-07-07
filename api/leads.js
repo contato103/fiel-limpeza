@@ -133,6 +133,8 @@ async function sendLeadCAPI(d, ip, geo) {
   const ln = d.last_name  ? normName(d.last_name)  : (nameParts.slice(1).join(' ') || '');
 
   const ud = { country: [await sha256('br')] };
+  const email = (d.email || '').toLowerCase().trim();
+  if (email)        ud.em = [await sha256(email)];
   if (phone)        ud.ph = [await sha256(phone)];
   if (fn)           ud.fn = [await sha256(fn)];
   if (ln)           ud.ln = [await sha256(ln)];
@@ -146,7 +148,7 @@ async function sendLeadCAPI(d, ip, geo) {
   if (d.fbp)        ud.fbp = d.fbp;
 
   // Precisa de pelo menos um identificador forte
-  if (!ud.ph && !ud.fbp && !ud.fbc) return { skipped: 'no_identifiers' };
+  if (!ud.ph && !ud.em && !ud.fbp && !ud.fbc) return { skipped: 'no_identifiers' };
 
   const payload = {
     data: [{
@@ -224,11 +226,13 @@ export default async function handler(req) {
       'mês':          ts.mes,
       'data':         ts.br,
       'nome':         d.name      || '',
+      'email':        (d.email    || '').toLowerCase().trim(),
       'empresa':      d.empresa   || '',
       'cnpj':         d.cnpj      || '',
       'telefone':     formatPhone(d.phone),
       'cidade':       d.cidade    || '',
       'serviço':      d.servico   || '',
+      'mensagem':     d.mensagem  || '',
       'status':       '',
       'utm_source':   utms.utm_source   || '',
       'utm_medium':   utms.utm_medium   || '',
