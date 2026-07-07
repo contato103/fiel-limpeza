@@ -99,6 +99,75 @@ function getLocalDate() {
   };
 }
 
+// ── Meta CAPI (Lead) server-side ───────────────────────────────────
+// Enviado no submit, com dedup pelo mesmo event_id do pixel do navegador.
+async function sha256(str) {
+  if (!str) return '';
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(str)));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function normName(name) {
+  return (name || '').toLowerCase().trim()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z\s]/g, '').trim();
+}
+function normCity(city) {
+  return (city || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z]/g, '');
+}
+function phoneForMeta(raw) {           // só dígitos com DDI, SEM '+' (ex: 5547999990000)
+  let d = (raw || '').replace(/\D/g, '');
+  if (d.startsWith('0')) d = d.slice(1);
+  if (d.startsWith('55')) return (d.length >= 12 && d.length <= 13) ? d : '';
+  if (d.length === 11) return '55' + d;
+  return '';
+}
+
+async function sendLeadCAPI(d, ip, geo) {
+  const PIXEL = process.env.META_PIXEL_ID;
+  const TOKEN = process.env.META_ACCESS_TOKEN;
+  if (!PIXEL || !TOKEN) return { skipped: 'no_creds' };
+
+  const phone = phoneForMeta(d.phone);
+  const nameParts = normName(d.name).split(/\s+/);
+  const fn = d.first_name ? normName(d.first_name) : (nameParts[0] || '');
+  const ln = d.last_name  ? normName(d.last_name)  : (nameParts.slice(1).join(' ') || '');
+
+  const ud = { country: [await sha256('br')] };
+  if (phone)        ud.ph = [await sha256(phone)];
+  if (fn)           ud.fn = [await sha256(fn)];
+  if (ln)           ud.ln = [await sha256(ln)];
+  if (d.event_id)   ud.external_id = [d.event_id];
+  if (d.cidade)     ud.ct = [await sha256(normCity(d.cidade))];
+  if (geo.region_code) ud.st = [await sha256(geo.region_code.toLowerCase().slice(0, 2))];
+  if (geo.postal) { const zp = geo.postal.replace(/\D/g, '').slice(0, 8); if (zp.length === 8) ud.zp = [await sha256(zp)]; }
+  if (ip)           ud.client_ip_address = ip;
+  if (d.user_agent) ud.client_user_agent = d.user_agent;
+  if (d.fbc)        ud.fbc = d.fbc;
+  if (d.fbp)        ud.fbp = d.fbp;
+
+  // Precisa de pelo menos um identificador forte
+  if (!ud.ph && !ud.fbp && !ud.fbc) return { skipped: 'no_identifiers' };
+
+  const payload = {
+    data: [{
+      event_name:       'Lead',
+      event_time:       Math.floor(Date.now() / 1000),
+      event_id:         d.event_id || undefined,
+      action_source:    'website',
+      event_source_url: d.page_url || undefined,
+      user_data:        ud,
+    }],
+  };
+  if (process.env.META_TEST_CODE) payload.test_event_code = process.env.META_TEST_CODE;
+
+  const res = await fetch(`https://graph.facebook.com/v19.0/${PIXEL}/events`, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+    body:    JSON.stringify(payload),
+  });
+  return { status: res.status };
+}
+
 export default async function handler(req) {
   const origin = req.headers.get('origin') || '';
   const corsHeaders = getCorsHeaders(origin);
@@ -218,6 +287,9 @@ export default async function handler(req) {
       const err = await res.json();
       throw new Error(`SHEETS_FAIL(${res.status}): ${JSON.stringify(err)}`);
     }
+
+    // Lead gravado no Sheets. Dispara o CAPI Lead (dedup com o pixel via event_id; não bloqueia se falhar).
+    try { await sendLeadCAPI(d, ip, geo); } catch (e) { console.error('[leads] capi:', e && e.message || e); }
 
     return new Response(JSON.stringify({ success: true }), {
       status:  200,
