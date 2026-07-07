@@ -3,6 +3,21 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1223573329227213');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel -->
+
 <title>Fiel Limpeza — Limpeza Pesada e Lavação de Fachada em Brusque/SC</title>
 <meta name="description" content="Limpeza pesada em Brusque e todo o Vale do Itajaí: fachadas, telhados, pisos, vidros, ACM e mais. Segurança NR35, rapel e plataforma articulada. Desde 2012, a limpeza que você pode confiar. Peça seu orçamento." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -791,18 +806,76 @@
   }
   document.querySelectorAll('input[type=tel]').forEach(mask);
 
-  // Fake submit -> success state (placeholder; hook to RD Station / backend later)
-  function handle(formId, okId){
+  // ── Tracking (Meta Pixel Lead + CAPI via /api/leads) ──
+  function getCookie(name){
+    const m = document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));
+    return m ? decodeURIComponent(m[2]) : '';
+  }
+  function generateEventId(){
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = Math.random()*16|0; return (c==='x'?r:(r&0x3|0x8)).toString(16);
+    });
+  }
+  function splitName(full){
+    const p = (full||'').trim().split(/\s+/);
+    return { first_name: p[0]||'', last_name: p.slice(1).join(' ')||'' };
+  }
+  function getUtms(){
+    const q = new URLSearchParams(location.search), out = {};
+    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(k => { if(q.get(k)) out[k]=q.get(k); });
+    if(Object.keys(out).length) sessionStorage.setItem('_utms', JSON.stringify(out));
+    try { return JSON.parse(sessionStorage.getItem('_utms')) || {}; } catch(_) { return {}; }
+  }
+  function getClickIds(){
+    const q = new URLSearchParams(location.search), out = {};
+    ['fbclid','gclid','gbraid','wbraid','ttclid','msclkid'].forEach(k => { if(q.get(k)) out[k]=q.get(k); });
+    if(Object.keys(out).length) sessionStorage.setItem('_clickids', JSON.stringify(out));
+    try { return JSON.parse(sessionStorage.getItem('_clickids')) || {}; } catch(_) { return {}; }
+  }
+
+  function handle(formId, okId, f){
     const form = document.getElementById(formId);
     if(!form) return;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      const val = id => (document.getElementById(id)?.value || '').trim();
+      const name = val(f.nome);
+      const { first_name, last_name } = splitName(name);
+      const clickIds = getClickIds();
+      const fbclid = clickIds.fbclid || '';
+      let fbc = getCookie('_fbc');
+      if(!fbc && fbclid) fbc = 'fb.1.'+Date.now()+'.'+fbclid;
+      const event_id = generateEventId();
+
+      const payload = {
+        name, empresa: val(f.empresa), phone: val(f.whats), cidade: val(f.cidade), servico: val(f.servico),
+        event_id, first_name, last_name,
+        fbp: getCookie('_fbp'), fbc, fbclid,
+        gclid: clickIds.gclid||'', gbraid: clickIds.gbraid||'', wbraid: clickIds.wbraid||'',
+        ttclid: clickIds.ttclid||'', msclkid: clickIds.msclkid||'',
+        page_url: location.href, referrer: document.referrer,
+        user_agent: navigator.userAgent, language: navigator.language,
+        screen: screen.width+'x'+screen.height,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        utms: getUtms(),
+      };
+
+      // Pixel Lead — mesmo event_id da edge function (dedup automático na Meta)
+      if(window.fbq) fbq('track','Lead',{},{ eventID: event_id });
+
+      // Grava no Sheets via edge function (não bloqueia a UX)
+      fetch('/api/leads', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload), keepalive:true,
+      }).catch(()=>{});
+
       form.style.display = 'none';
       document.getElementById(okId).classList.add('show');
     });
   }
-  handle('leadForm','formOk');
-  handle('leadForm2','formOk2');
+  handle('leadForm', 'formOk',  { nome:'nome',  empresa:'empresa',  whats:'whats',  cidade:'cidade',  servico:'servico'  });
+  handle('leadForm2','formOk2', { nome:'nome2', empresa:'empresa2', whats:'whats2', cidade:'cidade2', servico:'servico2' });
 
   // Mobile menu toggle
   const menuBtn = document.getElementById('menuBtn');
