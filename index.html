@@ -232,8 +232,8 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
 
 
   /* ================= SECTION SHELL ================= */
-  section.block{padding:clamp(60px,8vw,110px) 0}
-  .sec-head{max-width:64ch;margin-bottom:var(--s-8)}
+  section.block{padding:clamp(40px,5vw,68px) 0}
+  .sec-head{max-width:64ch;margin-bottom:var(--s-6)}
   .sec-head.center{margin-inline:auto;text-align:center}
   .sec-head h2{font-size:clamp(2rem,3.8vw,3.1rem);font-weight:900;margin-top:var(--s-3);letter-spacing:-0.03em}
   .sec-head p{font-size:1.08rem;color:var(--ink-soft);margin-top:var(--s-4);max-width:60ch}
@@ -266,7 +266,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   .svc .tagline{margin-top:auto;padding-top:var(--s-3);font-family:var(--font-display);font-weight:700;font-size:.82rem;color:var(--green);display:inline-flex;align-items:center;gap:6px}
   .svc .tagline svg{width:15px;height:15px;transition:transform .25s var(--ease)}
   .svc:hover .tagline svg{transform:translateX(4px)}
-  .svc-more{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-3);margin-top:var(--s-6);padding-top:var(--s-5);border-top:1px solid var(--line)}
+  .svc-more{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-3);margin-top:var(--s-4);padding-top:var(--s-3);border-top:1px solid var(--line)}
   .svc-more span{font-family:var(--font-display);font-weight:800;color:var(--ink);font-size:.98rem}
   .svc-more em{font-style:normal;font-size:.9rem;color:var(--green-800);font-weight:600;background:#E1EFE5;padding:8px 15px;border-radius:100px}
 
@@ -285,7 +285,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   .diff{background:var(--ink);color:var(--on-dark)}
   .diff .sec-head h2{color:var(--white)}
   .diff .sec-head p{color:var(--on-dark-soft)}
-  .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+  .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:stretch}
   .diff-list{display:flex;flex-direction:column;gap:var(--s-2)}
   .diff-item{display:flex;gap:var(--s-4);padding:var(--s-5) 0;border-top:1px solid oklch(0.4 0.05 131 /.4)}
   .diff-item:last-child{border-bottom:1px solid oklch(0.4 0.05 131 /.4)}
@@ -298,7 +298,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--s-4);counter-reset:step}
   .step{position:relative;padding-top:var(--s-6)}
   .step::before{counter-increment:step;content:"0" counter(step);font-family:var(--font-display);font-weight:900;font-size:3rem;color:#CFE3D4;line-height:.8;position:absolute;top:-8px;left:0}
-  .step h3{font-size:1.18rem;font-weight:800;margin-top:var(--s-3);position:relative}
+  .step h3{font-size:1.18rem;font-weight:800;margin-top:var(--s-3);position:relative;color:var(--amber-600)}
   .step p{font-size:.94rem;color:var(--ink-soft);margin-top:6px}
   .step .bar{height:3px;width:44px;background:var(--lime);border-radius:3px;margin-top:var(--s-4)}
 
@@ -322,7 +322,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   /* ================= FAQ ================= */
   .faq{max-width:760px;margin-inline:auto}
   .qa{border-bottom:1px solid var(--line)}
-  .qa summary{cursor:pointer;list-style:none;padding:var(--s-5) 0;display:flex;justify-content:space-between;align-items:center;gap:var(--s-4);
+  .qa summary{cursor:pointer;list-style:none;padding:var(--s-3) 0;display:flex;justify-content:space-between;align-items:center;gap:var(--s-4);
     font-family:var(--font-display);font-weight:700;font-size:1.12rem;letter-spacing:-0.01em}
   .qa summary::-webkit-details-marker{display:none}
   .qa .plus{flex:0 0 auto;width:26px;height:26px;position:relative;transition:transform .3s var(--ease)}
@@ -373,6 +373,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
 
   /* ================= MANIFESTO ================= */
   .manifesto{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .manifesto.block{padding:clamp(36px,4.5vw,60px) 0}
   .manifesto .wrap{max-width:900px}
   .manifesto h2{font-size:clamp(1.7rem,3.3vw,2.6rem);font-weight:900;letter-spacing:-0.03em;color:var(--green-800);margin-top:var(--s-4);line-height:1.08}
   .manifesto p{font-size:1.12rem;color:var(--ink-soft);margin-top:var(--s-5);line-height:1.72}
@@ -405,6 +406,9 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   .struct-item .si-ic svg{width:20px;height:20px}
   .struct-item h3{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:4px}
   .struct-item p{font-size:.86rem;color:var(--ink-soft);line-height:1.5}
+  .struct-head{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,56px);align-items:center;margin-bottom:var(--s-7)}
+  .struct-head h2{font-size:clamp(1.9rem,3.2vw,2.8rem);font-weight:900;letter-spacing:-0.03em;margin-top:var(--s-3)}
+  .struct-head p{color:var(--ink-soft);font-size:1.05rem}
   .struct-close{margin-top:var(--s-7);font-family:var(--font-display);font-weight:800;font-size:clamp(1.15rem,2vw,1.5rem);color:var(--green-800);text-align:center;letter-spacing:-0.02em}
 
   /* ================= SEGMENTS (card grid) ================= */
@@ -480,6 +484,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
     .seg-grid{grid-template-columns:repeat(2,1fr)}
     .reg-grid{grid-template-columns:repeat(2,1fr)}
     .regions-grid{grid-template-columns:1fr;gap:var(--s-6)}
+    .struct-head{grid-template-columns:1fr;gap:var(--s-3)}
     .cases{grid-template-columns:repeat(3,1fr)}
   }
   @media (max-width:600px){
@@ -550,7 +555,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
 <section class="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <span class="eyebrow anim a1">Limpeza pesada corporativa · Atuação em todo o Brasil</span>
+      <span class="eyebrow anim a1">Limpeza pesada corporativa</span>
       <h1 class="anim a2" style="margin-top:20px">Limpeza pesada e manutenção de fachadas para empresas que exigem <span class="hl">excelência</span>.</h1>
       <p class="lead anim a3">Há 14 anos, a Fiel resolve o que a limpeza comum não alcança. Estrutura própria (frota, caminhão munck, plataformas elevatórias e drones), equipe certificada <strong>NR35 e NR18</strong> e tecnologia de ponta para indústrias, comércios, condomínios e grandes redes em todo o Brasil. Você delega a operação inteira e a Fiel assume, do orçamento ao relatório de entrega.</p>
       <div class="hero-cta anim a4">
@@ -558,11 +563,6 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <a href="#estrutura" class="btn btn-ghost">Conhecer nossa estrutura</a>
-      </div>
-      <div class="trust anim a5">
-        <div class="trust-item"><b>14 anos</b><span>de operações de grande porte</span></div>
-        <div class="trust-item"><b>NR35 · NR18</b><span>equipe certificada e segurada</span></div>
-        <div class="trust-item"><b>Estrutura própria</b><span>munck, PTA, drones e hidrojato</span></div>
       </div>
     </div>
 
@@ -685,9 +685,11 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
 <!-- ============ ESTRUTURA PRÓPRIA ============ -->
 <section class="block structure" id="estrutura">
   <div class="wrap">
-    <div class="sec-head reveal" style="max-width:60ch">
-      <span class="eyebrow">Estrutura própria</span>
-      <h2>Engenharia de higienização com estrutura 100% própria.</h2>
+    <div class="struct-head reveal">
+      <div>
+        <span class="eyebrow">Estrutura própria</span>
+        <h2>Engenharia de higienização com estrutura 100% própria.</h2>
+      </div>
       <p>Enquanto boa parte do mercado aluga equipamento ou depende de terceiros, o Grupo Fiel mantém frota e maquinário próprios. Isso garante mobilização mais rápida, controle total e capacidade de aceitar trabalhos que outras empresas recusam.</p>
     </div>
     <div class="struct-grid">
@@ -708,7 +710,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
         <div class="struct-item"><div class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h6l1 4H7l1-4ZM7 7h8l1 12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L7 7Z"/></svg></div><h3>Linha própria de produtos</h3><p>Desenvolvida nas operações e disponibilizada ao mercado (Fifi Profissional).</p></div>
       </div>
     </div>
-    <p class="struct-close reveal">Uma empresa. Toda a estrutura. Nenhuma etapa dependendo de terceiros.</p>
+    <p class="struct-close reveal" style="text-align:left;line-height:1.25">Uma empresa.<br>Toda a estrutura.<br>Nenhuma etapa dependendo de terceiros.</p>
   </div>
 </section>
 <!-- ============ SERVICES ============ -->
@@ -832,7 +834,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
 <!-- ============ BEFORE / AFTER ============ -->
 <section class="block">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head reveal" style="margin-bottom:var(--s-5)">
       <span class="eyebrow">Resultado comprovado</span>
       <h2>Onde a limpeza comum para,<br>a Fiel resolve.</h2>
       <p>Superfícies incrustadas, com limo e poluição, recuperadas ao estado original, sem danificar o revestimento nem a estrutura. A limpeza técnica preserva o ativo e prolonga sua vida útil.</p>
@@ -848,7 +850,10 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
 <!-- ============ DIFERENCIAIS ============ -->
 <section class="block diff" id="diferenciais">
   <div class="wrap diff-grid">
-    <div class="diff-visual reveal"><img class="band-img" src="fiel_diff.jpg" alt="Caminhão e equipe do Grupo Fiel em operação" loading="lazy" style="object-position:center 55%"></div>
+    <div class="diff-visual reveal" style="display:flex;flex-direction:column;gap:var(--s-3);height:auto;align-self:stretch;overflow:visible">
+      <div style="height:clamp(520px,64vw,720px);flex:0 0 auto;overflow:hidden;border-radius:var(--radius)"><img class="band-img" src="fiel_diff.jpg" alt="Caminhão e equipe do Grupo Fiel em operação" loading="lazy" style="object-position:center 55%"></div>
+      <div style="flex:1;min-height:220px;overflow:hidden;border-radius:var(--radius);background:#F4F7F2"><img src="fiel_fifi_linha.jpg" alt="Linha Limpeza Pesada da Fifi Profissional: Organic Pro, Espuma Pro, Big Maq, Pós-Obra, Bye Ferrugem e Limpa Rejunte" loading="lazy" style="width:100%;height:100%;object-fit:contain;object-position:center"></div>
+    </div>
     <div>
       <div class="sec-head reveal" style="margin-bottom:var(--s-5)">
         <span class="eyebrow" style="color:var(--amber-500)">Por que o Grupo Fiel</span>
@@ -1003,7 +1008,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
 </section>
 
 <!-- ============ FAQ ============ -->
-<section class="block" style="background:var(--surface)">
+<section class="block" style="background:var(--surface);padding:clamp(40px,5vw,64px) 0">
   <div class="wrap">
     <div class="sec-head center reveal">
       <span class="eyebrow" style="justify-content:center">Dúvidas frequentes</span>
