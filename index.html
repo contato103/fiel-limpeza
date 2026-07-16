@@ -19,16 +19,6 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></noscript>
 <!-- End Meta Pixel -->
 
-<!-- Google Ads (gtag) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16757105436"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'AW-16757105436', { allow_enhanced_conversions: true });
-</script>
-<!-- End Google Ads -->
-
 <title>Fiel Limpeza Pesada | Conservação técnica de grandes estruturas em todo o Brasil</title>
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -1144,15 +1134,6 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
     const p = (full||'').trim().split(/\s+/);
     return { first_name: p[0]||'', last_name: p.slice(1).join(' ')||'' };
   }
-  // Google exige E.164 (+55...). Cuidado: DDD 55 (Santa Maria/RS) colide com o código do país,
-  // então só trata como país quando o total tem 12-13 dígitos.
-  function toE164(phone){
-    const d = (phone||'').replace(/\D/g,'');
-    if(!d) return '';
-    if((d.length === 12 || d.length === 13) && d.startsWith('55')) return '+'+d;
-    if(d.length === 10 || d.length === 11) return '+55'+d;
-    return '+'+d;
-  }
   function getUtms(){
     const q = new URLSearchParams(location.search), out = {};
     ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(k => { if(q.get(k)) out[k]=q.get(k); });
@@ -1196,21 +1177,6 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
 
       // Pixel Lead — mesmo event_id da edge function (dedup automático na Meta)
       if(window.fbq) fbq('track','Lead',{},{ eventID: event_id });
-
-      // Google Ads Lead — o gtag normaliza e hasheia o user_data (Enhanced Conversions for Leads)
-      if(window.gtag){
-        gtag('set', 'user_data', {
-          email: payload.email,
-          phone_number: toE164(payload.phone),
-          address: { first_name, last_name },
-        });
-        gtag('event', 'conversion', {
-          send_to: 'AW-16757105436/_yuXCPjEz9EcEJzGtLY-',
-          value: 1.0,
-          currency: 'BRL',
-          transaction_id: event_id,
-        });
-      }
 
       // Grava no Sheets via edge function (não bloqueia a UX)
       fetch('/api/leads', {
