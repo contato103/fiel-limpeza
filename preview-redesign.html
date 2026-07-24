@@ -1120,26 +1120,6 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   }
   document.querySelectorAll('#cnpj, #cnpj2').forEach(maskCnpj);
 
-  /* Digitos verificadores do CNPJ (modulo 11, pesos 5..2 e 6..2). Barra CNPJ
-     inventado/incompleto no submit — lead sem empresa real nao entra na planilha.
-     So numerico: o CNPJ alfanumerico da Receita comecou a ser emitido em
-     07/2026, empresa com ele tem dias de vida — fora do perfil B2B da Fiel. */
-  function validarCnpj(valor){
-    const d = (valor||'').replace(/\D/g,'');
-    if(d.length!==14 || new Set(d).size===1) return false;   // 111... passa no DV, tem que barrar
-    const dv = base => {
-      let peso = base.length-7, soma = 0;
-      for(const c of base){ soma += (+c)*peso; peso = peso===2 ? 9 : peso-1; }
-      const resto = soma % 11;
-      return resto < 2 ? 0 : 11-resto;
-    };
-    return dv(d.slice(0,12))===+d[12] && dv(d.slice(0,13))===+d[13];
-  }
-  // limpa o erro enquanto digita, senao a mensagem antiga gruda no campo
-  document.querySelectorAll('#cnpj, #cnpj2').forEach(el => {
-    el.addEventListener('input', () => el.setCustomValidity(''));
-  });
-
   // ── Tracking (Meta Pixel Lead + CAPI via /api/leads) ──
   function getCookie(name){
     const m = document.cookie.match(new RegExp('(^| )'+name+'=([^;]+)'));
@@ -1170,31 +1150,8 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
   function handle(formId, okId, f){
     const form = document.getElementById(formId);
     if(!form) return;
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-
-      /* CNPJ antes de tudo: se o lead for barrado, o pixel NAO pode ter
-         disparado — senao conta conversao de lead que nao entrou. */
-      const elCnpj = document.getElementById(f.cnpj);
-      if(elCnpj && !validarCnpj(elCnpj.value)){
-        elCnpj.setCustomValidity('CNPJ invalido — confira os 14 numeros digitados.');
-        elCnpj.reportValidity();
-        return;
-      }
-      const btn = form.querySelector('button[type=submit], input[type=submit]');
-      const rotulo = btn ? btn.textContent : '';
-      if(btn){ btn.disabled = true; btn.textContent = 'Verificando CNPJ...'; }
-      try{
-        const r = await fetch('/api/cnpj?n=' + (elCnpj?.value||'').replace(/\D/g,''));
-        const j = await r.json();
-        if(j && j.ok === 'nao'){
-          if(btn){ btn.disabled = false; btn.textContent = rotulo; }
-          elCnpj.setCustomValidity('Nao encontramos esse CNPJ na Receita. Confira ou use o CNPJ da empresa.');
-          elCnpj.reportValidity();
-          return;
-        }
-      }catch(_){ /* rede fora: segue (o digito verificador ja passou) */ }
-      if(btn){ btn.disabled = false; btn.textContent = rotulo; }
 
       const val = id => (document.getElementById(id)?.value || '').trim();
       const name = val(f.nome);
