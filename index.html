@@ -601,6 +601,22 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
           </div>
         </div>
         <div class="field">
+          <label for="segmento">Segmento da empresa</label>
+          <select id="segmento" name="segmento" required>
+            <option value="" disabled selected>Selecione o segmento</option>
+            <option>Indústria</option>
+            <option>Supermercado / Atacadista</option>
+            <option>Centro logístico</option>
+            <option>Condomínio residencial ou comercial</option>
+            <option>Hospital / Clínica</option>
+            <option>Hotel / Pousada</option>
+            <option>Instituição de ensino</option>
+            <option>Cooperativa</option>
+            <option>Rede varejista</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="servico">Serviço de interesse</label>
           <select id="servico" name="servico">
             <option>Limpeza de fachadas</option>
@@ -973,6 +989,22 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
           <input id="whats2" type="tel" inputmode="tel" placeholder="(00) 00000-0000" required />
         </div>
         <div class="field">
+          <label for="segmento2">Segmento da empresa</label>
+          <select id="segmento2" required>
+            <option value="" disabled selected>Selecione o segmento</option>
+            <option>Indústria</option>
+            <option>Supermercado / Atacadista</option>
+            <option>Centro logístico</option>
+            <option>Condomínio residencial ou comercial</option>
+            <option>Hospital / Clínica</option>
+            <option>Hotel / Pousada</option>
+            <option>Instituição de ensino</option>
+            <option>Cooperativa</option>
+            <option>Rede varejista</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="field">
           <label for="servico2">Serviço de interesse</label>
           <select id="servico2">
             <option>Limpeza de fachadas</option>
@@ -1206,7 +1238,7 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
       const event_id = generateEventId();
 
       const payload = {
-        name, email: val(f.email), empresa: val(f.empresa), cnpj: val(f.cnpj), phone: val(f.whats), cidade: val(f.cidade), servico: val(f.servico), mensagem: val(f.mensagem),
+        name, email: val(f.email), empresa: val(f.empresa), cnpj: val(f.cnpj), phone: val(f.whats), cidade: val(f.cidade), segmento: val(f.segmento), servico: val(f.servico), mensagem: val(f.mensagem),
         event_id, first_name, last_name,
         fbp: getCookie('_fbp'), fbc, fbclid,
         gclid: clickIds.gclid||'', gbraid: clickIds.gbraid||'', wbraid: clickIds.wbraid||'',
@@ -1231,8 +1263,8 @@ src="https://www.facebook.com/tr?id=1223573329227213&ev=PageView&noscript=1"/></
       document.getElementById(okId).classList.add('show');
     });
   }
-  handle('leadForm', 'formOk',  { nome:'nome',  email:'email',  empresa:'empresa',  cnpj:'cnpj',  whats:'whats',  cidade:'cidade',  servico:'servico',  mensagem:'mensagem'  });
-  handle('leadForm2','formOk2', { nome:'nome2', email:'email2', empresa:'empresa2', cnpj:'cnpj2', whats:'whats2', cidade:'cidade2', servico:'servico2', mensagem:'mensagem2' });
+  handle('leadForm', 'formOk',  { nome:'nome',  email:'email',  empresa:'empresa',  cnpj:'cnpj',  whats:'whats',  cidade:'cidade',  segmento:'segmento',  servico:'servico',  mensagem:'mensagem'  });
+  handle('leadForm2','formOk2', { nome:'nome2', email:'email2', empresa:'empresa2', cnpj:'cnpj2', whats:'whats2', cidade:'cidade2', segmento:'segmento2', servico:'servico2', mensagem:'mensagem2' });
 
   // Mobile menu toggle
   const menuBtn = document.getElementById('menuBtn');

@@ -231,6 +231,7 @@ export default async function handler(req) {
       'cnpj':         d.cnpj      || '',
       'telefone':     formatPhone(d.phone),
       'cidade':       d.cidade    || '',
+      'segmento':     d.segmento  || '',
       'serviço':      d.servico   || '',
       'mensagem':     d.mensagem  || '',
       'status':       '',
