@@ -2,3 +2,6 @@
 sheets-setup-fiel.gs
 node_modules
 .DS_Store
+
+# testes locais (harness sem rede da gravacao por aba do mes)
+_teste_local/

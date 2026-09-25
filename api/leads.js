@@ -1,14 +1,26 @@
 export const config = { runtime: 'edge' };
+import { gravarLead, diagnosticar } from './_abas-mensais.js';
+
+// Colunas que o health-check exige no cabeçalho da aba do mês (avisa se faltar).
+const COLUNAS_ESPERADAS = ['mês', 'data', 'nome', 'email', 'empresa', 'cnpj', 'telefone', 'cidade', 'serviço', 'segmento',
+  'mensagem', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'event id', 'gclid', 'fbclid', 'data iso'];
 
 // ── Fiel Limpeza — Edge function de captura de leads ───────────────
 // Grava no Google Sheets mapeando PELO NOME DA COLUNA (lê a linha 1 da
-// planilha a cada request). Reordenar/renomear colunas não quebra o
-// envio: header que não casa com o fieldMap é gravado em branco, sem erro.
-// NÃO envia CAPI — o Apps Script (sheets-setup-fiel.gs) faz isso via onChange.
+// aba a cada request). Reordenar/renomear colunas não quebra o envio:
+// header que não casa com o fieldMap é gravado em branco, sem erro (o
+// health-check avisa quais colunas esperadas sumiram do cabeçalho).
+// Grava na ABA DO MÊS (ver _abas-mensais.js, cópia idêntica do fifi-b2b),
+// não mais numa aba fixa "Leads": quando a antiga "Leads" virou "AGOSTO"
+// na separação por mês, a LP parou de gravar até a aba provisória "Leads"
+// ser criada em 25/09/2026 02:05. Se a aba do mês falhar, o lead vai para
+// a aba "LEADS CONTINGÊNCIA" e o health-check fica vermelho.
+// A EDGE manda o Lead CAPI para a Meta (sendLeadCAPI, dedup com o pixel
+// via event_id), DEPOIS de gravar na planilha; se o CAPI falhar, o lead
+// continua gravado e a resposta continua 200. O Apps Script da planilha
+// cuida do RD Station (onChange) e dos eventos de funil por Status (onEdit).
 
 const SPREADSHEET_ID  = process.env.SPREADSHEET_ID;
-const SHEET_NAME      = 'Leads';
-const SHEET_RANGE     = (a1) => encodeURIComponent(`'${SHEET_NAME}'!${a1}`);
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
 
 function getCorsHeaders(origin) {
@@ -176,16 +188,19 @@ export default async function handler(req) {
 
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
-  // Health-check (read-only): valida token + leitura dos headers da aba — sem gravar nem CAPI.
-  // GET /api/leads?health=1  -> 200 {ok:true} se consegue ler a planilha; 500 caso contrário.
+  // Health-check (read-only): valida token + diz em que aba do mês o próximo lead cairia — sem gravar nem CAPI.
+  // GET /api/leads?health=1  -> 200 {ok:true, aba_do_mes, sera_criada, colunas, avisos...} ; 500 caso contrário.
   if (req.method === 'GET' && new URL(req.url).searchParams.get('health') === '1') {
     try {
       const token = await getAccessToken(process.env.GOOGLE_CREDENTIALS);
-      const hr = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_RANGE('1:1')}`, { headers: { 'Authorization': `Bearer ${token}` } });
-      if (!hr.ok) return new Response(JSON.stringify({ ok: false, stage: 'headers', status: hr.status, sheet: SHEET_NAME }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-      const hd = await hr.json();
-      const columns = (hd.values?.[0] || []).length;
-      return new Response(JSON.stringify({ ok: true, sheet: SHEET_NAME, columns }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      let planilha;
+      try {
+        planilha = await diagnosticar({ planilhaId: SPREADSHEET_ID, token, esperadas: COLUNAS_ESPERADAS });
+      } catch (e) {
+        return new Response(JSON.stringify({ ok: false, stage: 'planilha', erro: String(e && e.message || e).slice(0, 300) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      }
+      if (!planilha.ok) return new Response(JSON.stringify({ ...planilha, stage: 'planilha' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify(planilha), { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (e) {
       return new Response(JSON.stringify({ ok: false, stage: 'token', error: String(e && e.message || e) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
@@ -270,28 +285,13 @@ export default async function handler(req) {
       throw new Error(`TOKEN_FAIL: ${tokenErr.message}`);
     }
 
-    const headersUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_RANGE('1:1')}`;
-    const headersRes = await fetch(headersUrl, {
-      headers: { 'Authorization': `Bearer ${token}` },
-    });
-    if (!headersRes.ok) throw new Error(`HEADERS_FAIL(${headersRes.status})`);
-
-    const headersData = await headersRes.json();
-    const headers = (headersData.values?.[0] || []).map(h => h.toLowerCase().trim());
-
-    // Monta a linha na ORDEM ATUAL dos cabeçalhos da planilha.
-    const row = headers.map(h => fieldMap[h] ?? '');
-
-    const appendUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_RANGE('A:A')}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`;
-    const res = await fetch(appendUrl, {
-      method:  'POST',
-      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ values: [row] }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(`SHEETS_FAIL(${res.status}): ${JSON.stringify(err)}`);
+    // Aba do mês (linha 2, na ORDEM ATUAL dos cabeçalhos); se falhar, aba
+    // "LEADS CONTINGÊNCIA" com o JSON completo. Só lança se as duas falharem.
+    try {
+      await gravarLead({ planilhaId: SPREADSHEET_ID, token, campos: fieldMap });
+    } catch (sheetErr) {
+      console.error('[leads] lead NÃO gravado:', JSON.stringify(fieldMap));
+      throw new Error(`SHEETS_FAIL: ${sheetErr.message}`);
     }
 
     // Lead gravado no Sheets. Dispara o CAPI Lead (dedup com o pixel via event_id; não bloqueia se falhar).
