@@ -21,6 +21,9 @@
 // - Rede de segurança: se qualquer coisa falhar, o lead vai para a aba
 //   "LEADS CONTINGÊNCIA" (criada se preciso) e o health-check passa a avisar.
 //   O lead não se perde por causa de mudança na planilha.
+// - Dado sem coluna (alguém digitou por cima do texto da linha 1, como em
+//   SETEMBRO!K1 da Fiel): o lead entra na aba do mês com o que tem coluna e vai
+//   também COMPLETO para a contingência; o health-check fica vermelho.
 
 const MESES_ABA = ['JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO',
   'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO'];
@@ -196,10 +199,14 @@ export async function gravarNoMes({ planilhaId, token, campos, agora = new Date(
   if (!cabecalhoDeLeads(cabecalho, conhecidas)) throw new Error(`SEM_CABECALHO_DE_LEADS na aba "${alvo.title}"`);
 
   // Texto puro (equivale ao RAW do append): "=IMPORTXML(...)" vira texto, "+55..." não vira número.
+  const vazio = v => v === undefined || v === null || v === '';
   const values = cabecalho.map(h => {
     const v = campos[h];
-    return v === undefined || v === null || v === '' ? {} : { userEnteredValue: { stringValue: String(v) } };
+    return vazio(v) ? {} : { userEnteredValue: { stringValue: String(v) } };
   });
+  // Dado preenchido sem coluna no cabeçalho (ex.: K1 virou fórmula e "Mensagem" sumiu):
+  // quem chama manda o lead completo para a contingência, senão o dado some calado.
+  const semColuna = Object.keys(campos).filter(k => !vazio(campos[k]) && !cabecalho.includes(k));
 
   // Tudo no MESMO batchUpdate (atômico: dois leads simultâneos não se sobrescrevem).
   const sid = alvo.sheetId;
@@ -219,7 +226,7 @@ export async function gravarNoMes({ planilhaId, token, campos, agora = new Date(
     { updateCells: { start: { sheetId: sid, rowIndex: 1, columnIndex: 0 }, rows: [{ values }], fields: 'userEnteredValue' } },
   );
   await batch(fetchImpl, planilhaId, token, requests);
-  return { aba: alvo.title, criada };
+  return { aba: alvo.title, criada, semColuna };
 }
 
 // Última defesa: grava na aba fixa de contingência (cria se não existir), sem
@@ -246,16 +253,30 @@ async function gravarContingencia({ planilhaId, token, campos, motivo, fetchImpl
 }
 
 // O que os endpoints chamam: aba do mês; se falhar, contingência; se falhar também, erro.
-// Devolve {aba, criada, contingencia}.
+// Se gravou na aba do mês mas algum dado ficou sem coluna, manda também uma cópia
+// completa para a contingência (o health fica vermelho até alguém completar o lead).
+// Devolve {aba, criada, contingencia, incompleto?}.
 export async function gravarLead({ planilhaId, token, campos, agora = new Date(), fetchImpl = fetch }) {
+  let r;
   try {
-    return { ...(await gravarNoMes({ planilhaId, token, campos, agora, fetchImpl })), contingencia: false };
+    r = await gravarNoMes({ planilhaId, token, campos, agora, fetchImpl });
   } catch (erro) {
     // Log com os dados: recuperável pelos logs da Vercel mesmo se a contingência falhar.
     console.error('[planilha] falhou na aba do mês, indo para a contingência:', erro.message, JSON.stringify(campos));
     await gravarContingencia({ planilhaId, token, campos, motivo: erro.message, fetchImpl });
     return { aba: ABA_CONTINGENCIA, criada: false, contingencia: true, erro: erro.message };
   }
+  const { semColuna, ...gravado } = r;
+  if (!semColuna.length) return { ...gravado, contingencia: false };
+  const motivo = `INCOMPLETO: gravado na aba "${gravado.aba}" sem coluna para: ${semColuna.join(', ')} (texto da linha 1 mudou?)`;
+  console.error('[planilha] lead gravado sem algumas colunas, cópia completa na contingência:', motivo, JSON.stringify(campos));
+  try {
+    await gravarContingencia({ planilhaId, token, campos, motivo, fetchImpl });
+  } catch (e) {
+    // O lead já está na aba do mês (sem esses dados) e completo no log acima: não derruba a resposta.
+    console.error('[planilha] a cópia na contingência falhou:', e.message);
+  }
+  return { ...gravado, contingencia: true, incompleto: semColuna };
 }
 
 // Health-check SÓ DE LEITURA: onde o próximo lead cairia e o que está estranho.
@@ -270,7 +291,8 @@ export async function diagnosticar({ planilhaId, token, esperadas = [], agora = 
   const avisos = [];
   const problemas = [];
   if (!cabecalhoDeLeads(cabecalho, esperadas.length ? esperadas : [...set])) problemas.push(`a linha 1 da aba "${ref.title}" não é um cabeçalho de leads`);
-  if (faltando.length) avisos.push(`colunas não encontradas no cabeçalho (vão chegar vazias): ${faltando.join(', ')}`);
+  // Coluna esperada faltando é PROBLEMA (500): o dado não entra na aba do mês e cada lead vai também para a contingência.
+  if (faltando.length) problemas.push(`colunas não encontradas no cabeçalho da aba "${ref.title}" (corrigir o texto da linha 1; até lá cada lead vai também para "${ABA_CONTINGENCIA}"): ${faltando.join(', ')}`);
   if (plano.alvo && plano.alvo.hidden) avisos.push(`a aba do mês "${plano.alvo.title}" está oculta`);
   if (plano.duplicadas.length) avisos.push(`mais de uma aba para este mês; o site usa "${plano.alvo.title}" e ignora: ${plano.duplicadas.join(', ')}`);
   const cont = abas.find(a => a.title === ABA_CONTINGENCIA);
@@ -278,7 +300,7 @@ export async function diagnosticar({ planilhaId, token, esperadas = [], agora = 
   if (cont) {
     const d = await chamar(fetchImpl, `${API}/${planilhaId}/values/${intervalo(ABA_CONTINGENCIA, 'A2:A')}`, token);
     emContingencia = (d.values || []).filter(r => r[0]).length;
-    if (emContingencia) problemas.push(`${emContingencia} lead(s) na aba "${ABA_CONTINGENCIA}": mover para a aba do mês e apagar de lá`);
+    if (emContingencia) problemas.push(`${emContingencia} lead(s) na aba "${ABA_CONTINGENCIA}": ver o motivo de cada um, mover ou completar na aba do mês e apagar de lá`);
   }
   return {
     ok: problemas.length === 0,

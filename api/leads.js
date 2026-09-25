@@ -1,16 +1,16 @@
 export const config = { runtime: 'edge' };
 import { gravarLead, diagnosticar } from './_abas-mensais.js';
 
-// Colunas que o health-check exige no cabeçalho da aba do mês (avisa se faltar).
+// Colunas que o health-check exige no cabeçalho da aba do mês (fica vermelho se faltar).
 const COLUNAS_ESPERADAS = ['mês', 'data', 'nome', 'email', 'empresa', 'cnpj', 'telefone', 'cidade', 'serviço', 'segmento',
   'mensagem', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'event id', 'gclid', 'fbclid', 'data iso'];
 
 // ── Fiel Limpeza — Edge function de captura de leads ───────────────
 // Grava no Google Sheets mapeando PELO NOME DA COLUNA (lê a linha 1 da
-// aba a cada request). Reordenar/renomear colunas não quebra o envio:
-// header que não casa com o fieldMap é gravado em branco, sem erro (o
-// health-check avisa quais colunas esperadas sumiram do cabeçalho).
-// Grava na ABA DO MÊS (ver _abas-mensais.js, cópia idêntica do fifi-b2b),
+// aba a cada request). Reordenar colunas não quebra o envio. Dado sem
+// coluna (texto da linha 1 digitado por cima) não some: o lead vai também
+// completo para a "LEADS CONTINGÊNCIA" e o health-check fica vermelho.
+// Grava na ABA DO MÊS (ver _abas-mensais.js, baseado no do fifi-b2b),
 // não mais numa aba fixa "Leads": quando a antiga "Leads" virou "AGOSTO"
 // na separação por mês, a LP parou de gravar até a aba provisória "Leads"
 // ser criada em 25/09/2026 02:05. Se a aba do mês falhar, o lead vai para
