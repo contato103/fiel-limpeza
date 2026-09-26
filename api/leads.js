@@ -75,18 +75,34 @@ async function getAccessToken(serviceAccountKey) {
 
   const jwt = `${signatureInput}.${signatureBase64}`;
 
-  const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      assertion: jwt,
-    }),
-  });
-
-  const tokenData = await tokenResponse.json();
-  if (!tokenResponse.ok) throw new Error(`Token error: ${tokenData.error_description}`);
-  return tokenData.access_token;
+  // Até 2 novas tentativas em falha de rede, 429 ou 5xx: o endpoint do Google às vezes devolve 503 em
+  // HTML, e antes disso bastava para o lead ficar fora da planilha. Erro 4xx (chave errada) não adianta repetir.
+  for (let tentativa = 0; ; tentativa++) {
+    let tokenResponse;
+    try {
+      tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+          assertion: jwt,
+        }),
+      });
+    } catch (e) {
+      if (tentativa < 2) { await new Promise(r => setTimeout(r, 400 * 3 ** tentativa)); continue; }
+      throw new Error(`Token error (rede): ${e.message}`);
+    }
+    const corpo = await tokenResponse.text();
+    let tokenData = null;
+    try { tokenData = JSON.parse(corpo); } catch (_) {}
+    if (tokenResponse.ok && tokenData && tokenData.access_token) return tokenData.access_token;
+    if ((tokenResponse.status === 429 || tokenResponse.status >= 500) && tentativa < 2) {
+      await new Promise(r => setTimeout(r, 400 * 3 ** tentativa));
+      continue;
+    }
+    const motivo = (tokenData && (tokenData.error_description || tokenData.error)) || corpo.slice(0, 120);
+    throw new Error(`Token error (${tokenResponse.status}): ${motivo}`);
+  }
 }
 
 function formatPhone(raw) {
@@ -282,6 +298,8 @@ export default async function handler(req) {
     try {
       token = await getAccessToken(process.env.GOOGLE_CREDENTIALS);
     } catch (tokenErr) {
+      // Sem token não dá para gravar em lugar nenhum: o lead fica completo no log da Vercel para recuperar.
+      console.error('[leads] lead NÃO gravado (token do Google):', tokenErr.message, JSON.stringify(fieldMap));
       throw new Error(`TOKEN_FAIL: ${tokenErr.message}`);
     }
 
