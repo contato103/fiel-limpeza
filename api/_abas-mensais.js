@@ -143,6 +143,10 @@ function novoSheetId() {
 const batch = (fetchImpl, planilhaId, token, requests) =>
   chamar(fetchImpl, `${API}/${planilhaId}:batchUpdate`, token, { method: 'POST', body: JSON.stringify({ requests }) });
 
+// O Sheets recusa o copyPaste quando o filtro da aba está escondendo linhas. Em
+// 27/10/2026 isso mandou um lead para a contingência, fora da vista do comercial.
+const filtroEscondendoLinhas = e => e.status === 400 && /filtered out row/i.test(e.corpo || e.message);
+
 async function criarAbaDoMes(fetchImpl, planilhaId, token, { nome, modelo }) {
   const sheetId = novoSheetId();
   const requests = [
@@ -225,7 +229,15 @@ export async function gravarNoMes({ planilhaId, token, campos, agora = new Date(
     { updateDimensionProperties: { range: { sheetId: sid, dimension: 'ROWS', startIndex: 1, endIndex: 2 }, properties: { hiddenByUser: false }, fields: 'hiddenByUser' } },
     { updateCells: { start: { sheetId: sid, rowIndex: 1, columnIndex: 0 }, rows: [{ values }], fields: 'userEnteredValue' } },
   );
-  await batch(fetchImpl, planilhaId, token, requests);
+  try {
+    await batch(fetchImpl, planilhaId, token, requests);
+  } catch (e) {
+    if (!filtroEscondendoLinhas(e)) throw e;
+    // A falha foi atômica: nada foi gravado, então repetir não duplica o lead.
+    // Sem o copyPaste a linha pode nascer sem a lista de Status, mas o lead fica na aba do mês.
+    console.warn(`[planilha] filtro escondendo linhas na aba "${alvo.title}": gravando sem copiar a validação de Status`);
+    await batch(fetchImpl, planilhaId, token, requests.filter(r => !r.copyPaste));
+  }
   return { aba: alvo.title, criada, semColuna };
 }
 
