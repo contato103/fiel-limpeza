@@ -469,7 +469,7 @@
 
 <!-- ===== CHATBOT (Typebot) — trocar pelo ID do fluxo da Limpadora ===== -->
 <script type="module">
-  const TYPEBOT_ID = '';   // ex.: 'fiel-limpadora'. Vazio = mostra o botão de WhatsApp no lugar.
+  const TYPEBOT_ID = 'fiel-limpadora';   // bot da Limpadora (Typebot da Digitha, contato@). Vazio = mostra o botão de WhatsApp no lugar.
   if (!TYPEBOT_ID) { document.getElementById('waFloat').classList.add('show'); }
   else {
     const { default: Typebot } = await import('https://cdn.jsdelivr.net/npm/@typebot.io/js@0/dist/web.js');
