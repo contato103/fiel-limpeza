@@ -477,7 +477,7 @@
     const clicks = JSON.parse(sessionStorage.getItem('_clickids') || '{}');
     Typebot.initBubble({
       typebot: TYPEBOT_ID,
-      theme: { button: { backgroundColor: '#25D366' }, chatWindow: { backgroundColor: '#EDF2E4' } },
+      theme: { button: { backgroundColor: '#25D366', customIconSrc: 'https://mkt.fiellimpeza.com/wa-icon.svg' }, chatWindow: { backgroundColor: '#EDF2E4' } },
       prefilledVariables: {
         utm_source: utms.utm_source||'', utm_medium: utms.utm_medium||'', utm_campaign: utms.utm_campaign||'',
         utm_term: utms.utm_term||'', utm_content: utms.utm_content||'',
